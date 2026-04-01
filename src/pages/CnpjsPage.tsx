@@ -1,222 +1,156 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Building2, 
-  Plus, 
-  Search, 
-  Filter, 
-  Download, 
-  MoreVertical,
-  ChevronLeft,
-  ChevronRight,
-  Mail,
-  Trash2,
-  RefreshCw,
-  AlertTriangle,
-  FileText
-} from 'lucide-react';
-import { motion } from 'motion/react';
-import { Card } from '../components/Card';
-import { Button } from '../components/Button';
-import { Input } from '../components/Input';
-import { Modal } from '../components/Modal';
-import { cn } from '../lib/utils';
-import { cnpjService } from '../services/cnpjService';
-import { CnpjResponse, CnpjRequest } from '../types';
+import { useEffect, useState } from 'react';
+import { Building2, Plus, Trash2, Search } from 'lucide-react';
+import { Card } from '@/components/Card';
+import { Button } from '@/components/Button';
+import { Input } from '@/components/Input';
+import { Modal } from '@/components/Modal';
+import { EmptyState } from '@/components/EmptyState';
+import { cnpjService } from '@/services/cnpjService';
+import { formatCnpj } from '@/lib/utils';
+import type { CnpjResponse, CnpjRequest } from '@/types';
 
-export const CnpjsPage = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const UF_LIST = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'];
+
+const EMPTY_FORM: CnpjRequest = {
+  cnpj: '',
+  razaoSocial: '',
+  nomeFantasia: '',
+  ie: '',
+  uf: '',
+  emailContato: '',
+};
+
+export function CnpjsPage() {
   const [cnpjs, setCnpjs] = useState<CnpjResponse[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [form, setForm] = useState<CnpjRequest>(EMPTY_FORM);
 
-  // Form state
-  const [formData, setFormData] = useState<CnpjRequest>({
-    cnpj: '',
-    razaoSocial: '',
-    nomeFantasia: '',
-    inscricaoEstadual: '',
-    uf: '',
-    emailContato: ''
-  });
-
-  const fetchCnpjs = async () => {
+  async function fetchCnpjs() {
     setLoading(true);
     try {
       const data = await cnpjService.listar();
       setCnpjs(data);
-    } catch (err) {
-      console.error('Erro ao carregar CNPJs:', err);
+    } catch {
+      console.error('Erro ao carregar CNPJs');
     } finally {
       setLoading(false);
     }
-  };
+  }
 
-  useEffect(() => {
-    fetchCnpjs();
-  }, []);
+  useEffect(() => { fetchCnpjs(); }, []);
 
-  const handleAddCnpj = async (e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSubmitting(true);
     setError('');
     try {
-      await cnpjService.cadastrar(formData);
+      await cnpjService.cadastrar(form);
       setIsModalOpen(false);
-      setFormData({
-        cnpj: '',
-        razaoSocial: '',
-        nomeFantasia: '',
-        inscricaoEstadual: '',
-        uf: '',
-        emailContato: ''
-      });
+      setForm(EMPTY_FORM);
       fetchCnpjs();
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao cadastrar CNPJ. Verifique os dados.');
+    } catch (err: unknown) {
+      const e = err as { message?: string };
+      setError(e.message ?? 'Erro ao cadastrar CNPJ.');
     } finally {
       setSubmitting(false);
     }
-  };
+  }
 
-  const handleDeleteCnpj = async (id: string) => {
-    if (window.confirm('Tem certeza que deseja remover este CNPJ?')) {
-      try {
-        await cnpjService.remover(id);
-        fetchCnpjs();
-      } catch (err) {
-        console.error('Erro ao remover CNPJ:', err);
-      }
+  async function handleDelete(id: string) {
+    if (!confirm('Remover este CNPJ do monitoramento?')) return;
+    try {
+      await cnpjService.remover(id);
+      fetchCnpjs();
+    } catch {
+      console.error('Erro ao remover CNPJ');
     }
-  };
+  }
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-700">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-        <div className="space-y-2">
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Meus CNPJs</h1>
-          <p className="text-slate-500 font-medium">Gerencie as empresas monitoradas no seu cofre digital.</p>
+    <div className="space-y-8">
+      <div className="flex justify-between items-end">
+        <div>
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight">Meus CNPJs</h1>
+          <p className="text-slate-500 font-medium mt-1 text-sm">
+            Empresas monitoradas no seu painel.
+          </p>
         </div>
-        <Button onClick={() => setIsModalOpen(true)} className="flex gap-2 group">
-          <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
-          Adicionar Novo CNPJ
+        <Button onClick={() => setIsModalOpen(true)}>
+          <Plus className="w-4 h-4" />
+          Adicionar CNPJ
         </Button>
-      </div>
-
-      {/* Stats Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {[
-          { label: 'Total de Empresas', value: cnpjs.length.toString(), sub: 'Unidades', icon: Building2, color: 'text-blue-600', bg: 'bg-blue-50' },
-          { label: 'Monitorando', value: cnpjs.length.toString(), sub: 'Ativos', icon: RefreshCw, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-          { label: 'Alertas Ativos', value: '0', sub: 'Pendências', icon: AlertTriangle, color: 'text-red-600', bg: 'bg-red-50' },
-          { label: 'NF-es (Mês)', value: '0', sub: 'Documentos', icon: FileText, color: 'text-indigo-600', bg: 'bg-indigo-50' },
-        ].map((stat, i) => (
-          <Card key={i} className="relative overflow-hidden group">
-            <div className="flex justify-between items-start relative z-10">
-              <div className="space-y-3">
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">{stat.label}</p>
-                <div className="flex items-baseline gap-2">
-                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">{stat.value}</h3>
-                </div>
-                <p className="text-[10px] font-bold text-slate-500 bg-slate-50 inline-block px-2 py-1 rounded-lg">{stat.sub}</p>
-              </div>
-              <div className={cn('p-4 rounded-2xl shadow-sm', stat.bg, stat.color)}>
-                <stat.icon className="w-6 h-6" />
-              </div>
-            </div>
-          </Card>
-        ))}
       </div>
 
       {/* Table Section */}
       <Card padding="none">
-        <div className="p-8 border-b border-slate-50 flex flex-col md:flex-row gap-6 justify-between items-center">
-          <div className="relative w-full md:max-w-md">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-            <input 
-              type="text" 
-              placeholder="Filtrar por CNPJ, Razão Social..." 
-              className="w-full pl-12 pr-6 py-3 bg-slate-50/50 border-2 border-slate-50 rounded-2xl text-sm font-medium focus:outline-none focus:ring-4 focus:ring-vigia-blue/5 focus:border-vigia-blue/20 transition-all"
-            />
-          </div>
-          <div className="flex gap-3 w-full md:w-auto">
-            <Button variant="outline" size="sm" className="flex gap-2">
-              <Filter className="w-4 h-4" />
-              Filtros
-            </Button>
-            <Button variant="outline" size="sm" className="flex gap-2">
-              <Download className="w-4 h-4" />
-              Exportar
-            </Button>
-          </div>
-        </div>
-
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 bg-slate-50/50">
-                <th className="px-8 py-5">CNPJ</th>
-                <th className="px-8 py-5">Razão Social / Fantasia</th>
-                <th className="px-8 py-5">UF</th>
-                <th className="px-8 py-5">Status</th>
-                <th className="px-8 py-5">Ações</th>
+              <tr className="text-[10px] font-black uppercase tracking-widest text-slate-400 bg-slate-50/50">
+                <th className="px-6 py-4">CNPJ</th>
+                <th className="px-6 py-4">Razão Social</th>
+                <th className="px-6 py-4">UF</th>
+                <th className="px-6 py-4">Status</th>
+                <th className="px-6 py-4 text-right">Ações</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="px-8 py-16 text-center">
-                    <div className="animate-spin rounded-full h-10 w-10 border-4 border-slate-100 border-t-vigia-blue mx-auto"></div>
+                  <td colSpan={5} className="px-6 py-16 text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-4 border-slate-100 border-t-vigia-blue mx-auto" />
                   </td>
                 </tr>
-              ) : cnpjs.length > 0 ? cnpjs.map((company) => (
-                <tr key={company.id} className="hover:bg-slate-50/50 transition-colors group">
-                  <td className="px-8 py-6 text-sm font-black text-vigia-blue">{company.cnpj}</td>
-                  <td className="px-8 py-6">
-                    <div className="flex flex-col gap-0.5">
-                      <span className="text-sm font-bold text-slate-900">{company.razaoSocial}</span>
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{company.nomeFantasia}</span>
-                    </div>
+              ) : cnpjs.length === 0 ? (
+                <tr>
+                  <td colSpan={5}>
+                    <EmptyState
+                      icon={<Building2 className="w-8 h-8" />}
+                      title="Nenhum CNPJ cadastrado"
+                      description="Adicione uma empresa para iniciar o monitoramento"
+                      action={{ label: 'Adicionar CNPJ', onClick: () => setIsModalOpen(true) }}
+                    />
                   </td>
-                  <td className="px-8 py-6">
-                    <span className="px-3 py-1 bg-blue-50 text-vigia-blue text-[10px] font-black rounded-lg border border-blue-100/50">
-                      {company.uf}
+                </tr>
+              ) : cnpjs.map((c) => (
+                <tr key={c.id} className="hover:bg-slate-50/50 transition-colors">
+                  <td className="px-6 py-4 text-sm font-black text-vigia-blue">
+                    {formatCnpj(c.cnpj)}
+                  </td>
+                  <td className="px-6 py-4">
+                    <p className="text-sm font-bold text-slate-900">{c.razaoSocial}</p>
+                    {c.nomeFantasia && (
+                      <p className="text-[10px] text-slate-400 font-bold uppercase">{c.nomeFantasia}</p>
+                    )}
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className="px-2 py-1 bg-blue-50 text-vigia-blue text-[10px] font-black rounded-lg border border-blue-100">
+                      {c.uf}
                     </span>
                   </td>
-                  <td className="px-8 py-6">
+                  <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-                      <span className="text-[10px] font-black uppercase text-slate-600 tracking-widest">Ativo</span>
+                      <div className={`w-2 h-2 rounded-full ${c.active ? 'bg-emerald-500' : 'bg-slate-300'}`} />
+                      <span className="text-[10px] font-black uppercase text-slate-600">
+                        {c.active ? 'Ativo' : 'Inativo'}
+                      </span>
                     </div>
                   </td>
-                  <td className="px-8 py-6">
-                    <div className="flex gap-2">
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="text-slate-300 hover:text-red-500 hover:bg-red-50"
-                        onClick={() => handleDeleteCnpj(company.id)}
-                      >
-                        <Trash2 className="w-5 h-5" />
-                      </Button>
-                      <Button variant="ghost" size="icon" className="text-slate-300 hover:text-vigia-blue hover:bg-blue-50">
-                        <MoreVertical className="w-5 h-5" />
-                      </Button>
-                    </div>
+                  <td className="px-6 py-4 text-right">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-slate-300 hover:text-red-500 hover:bg-red-50"
+                      onClick={() => handleDelete(c.id)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
                   </td>
                 </tr>
-              )) : (
-                <tr>
-                  <td colSpan={5} className="px-8 py-20 text-center">
-                    <div className="flex flex-col items-center gap-4">
-                      <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-200">
-                        <Building2 className="w-8 h-8" />
-                      </div>
-                      <p className="text-sm font-bold text-slate-400 uppercase tracking-[0.2em]">Nenhum CNPJ cadastrado</p>
-                    </div>
-                  </td>
-                </tr>
-              )}
+              ))}
             </tbody>
           </table>
         </div>
