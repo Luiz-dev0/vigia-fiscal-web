@@ -154,116 +154,76 @@ export function CnpjsPage() {
             </tbody>
           </table>
         </div>
-
-        <div className="p-8 border-t border-slate-50 flex justify-between items-center bg-slate-50/30">
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Mostrando {cnpjs.length} empresas</p>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="icon" className="w-10 h-10 rounded-xl" disabled>
-              <ChevronLeft className="w-5 h-5" />
-            </Button>
-            <Button variant="primary" size="sm" className="w-10 h-10 p-0 text-xs font-black rounded-xl">1</Button>
-            <Button variant="outline" size="icon" className="w-10 h-10 rounded-xl" disabled>
-              <ChevronRight className="w-5 h-5" />
-            </Button>
-          </div>
-        </div>
       </Card>
 
-      {/* Add CNPJ Modal */}
-      <Modal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        title="Novo CNPJ"
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => { setIsModalOpen(false); setError(''); setForm(EMPTY_FORM); }}
+        title="Adicionar CNPJ"
         footer={
           <>
-            <Button variant="ghost" onClick={() => setIsModalOpen(false)}>Cancelar</Button>
-            <Button onClick={handleAddCnpj} disabled={submitting}>
-              {submitting ? 'Processando...' : 'Confirmar Cadastro'}
+            <Button variant="ghost" onClick={() => setIsModalOpen(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={handleSubmit} loading={submitting}>
+              Cadastrar
             </Button>
           </>
         }
       >
-        <form className="space-y-8" onSubmit={handleAddCnpj}>
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-slate-500">Insira os dados da empresa para iniciar o monitoramento 24/7 na SEFAZ.</p>
-          </div>
-          
+        <form className="space-y-5" onSubmit={handleSubmit}>
           {error && (
-            <div className="p-4 bg-red-50 text-red-600 text-xs font-bold rounded-2xl border border-red-100">
+            <div className="p-3 bg-red-50 text-red-600 text-xs font-bold rounded-xl border border-red-100">
               {error}
             </div>
           )}
-
-          <div className="space-y-6">
-            <Input 
-              label="CNPJ da Empresa" 
-              placeholder="00.000.000/0000-00" 
-              icon={<Search className="w-5 h-5" />}
-              value={formData.cnpj}
-              onChange={(e) => setFormData({ ...formData, cnpj: e.target.value })}
-              required
+          <Input
+            label="CNPJ"
+            placeholder="00.000.000/0000-00"
+            icon={<Search className="w-4 h-4" />}
+            value={form.cnpj}
+            onChange={(e) => setForm({ ...form, cnpj: e.target.value })}
+            required
+          />
+          <Input
+            label="Razão Social"
+            placeholder="Nome jurídico completo"
+            value={form.razaoSocial}
+            onChange={(e) => setForm({ ...form, razaoSocial: e.target.value })}
+          />
+          <Input
+            label="Nome Fantasia"
+            placeholder="Como a empresa é conhecida"
+            value={form.nomeFantasia}
+            onChange={(e) => setForm({ ...form, nomeFantasia: e.target.value })}
+          />
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              label="Inscrição Estadual"
+              placeholder="Nº ou Isento"
+              value={form.ie}
+              onChange={(e) => setForm({ ...form, ie: e.target.value })}
             />
-            <Input 
-              label="Razão Social" 
-              placeholder="Nome jurídico completo" 
-              value={formData.razaoSocial}
-              onChange={(e) => setFormData({ ...formData, razaoSocial: e.target.value })}
-              required
-            />
-            <Input 
-              label="Nome Fantasia" 
-              placeholder="Como a empresa é conhecida" 
-              value={formData.nomeFantasia}
-              onChange={(e) => setFormData({ ...formData, nomeFantasia: e.target.value })}
-            />
-            <div className="grid grid-cols-2 gap-6">
-              <Input 
-                label="Inscrição Estadual" 
-                placeholder="Nº ou Isento" 
-                value={formData.inscricaoEstadual}
-                onChange={(e) => setFormData({ ...formData, inscricaoEstadual: e.target.value })}
-              />
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">UF</label>
-                <select 
-                  className="w-full rounded-2xl border-2 border-slate-50 bg-slate-50/50 px-4 py-3 text-sm font-medium focus:border-vigia-blue/20 focus:bg-white focus:outline-none focus:ring-4 focus:ring-vigia-blue/5 transition-all"
-                  value={formData.uf}
-                  onChange={(e) => setFormData({ ...formData, uf: e.target.value })}
-                  required
-                >
-                  <option value="">--</option>
-                  {['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'].map(uf => (
-                    <option key={uf} value={uf}>{uf}</option>
-                  ))}
-                </select>
-              </div>
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">UF</label>
+              <select
+                className="w-full rounded-2xl border-2 border-slate-50 bg-slate-50/50 px-4 py-3 text-sm font-medium focus:border-vigia-blue/30 focus:bg-white focus:outline-none focus:ring-4 focus:ring-vigia-blue/5 transition-all"
+                value={form.uf}
+                onChange={(e) => setForm({ ...form, uf: e.target.value })}
+                required
+              >
+                <option value="">--</option>
+                {UF_LIST.map((uf) => <option key={uf} value={uf}>{uf}</option>)}
+              </select>
             </div>
-            <Input 
-              label="E-mail de Notificações" 
-              placeholder="financeiro@empresa.com.br" 
-              icon={<Mail className="w-5 h-5" />}
-              value={formData.emailContato}
-              onChange={(e) => setFormData({ ...formData, emailContato: e.target.value })}
-              required
-            />
           </div>
-
-          <div className="p-6 bg-blue-50/50 rounded-3xl border border-blue-100/50 space-y-4">
-            <div className="flex justify-between items-center">
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Cota de Monitoramento</span>
-              <span className="text-xs font-black text-vigia-blue">{cnpjs.length} de 5</span>
-            </div>
-            <div className="h-2 w-full bg-blue-100/50 rounded-full overflow-hidden">
-              <motion.div 
-                initial={{ width: 0 }}
-                animate={{ width: `${(cnpjs.length / 5) * 100}%` }}
-                className="h-full bg-vigia-blue" 
-              />
-            </div>
-            <p className="text-[10px] text-slate-400 font-bold italic leading-relaxed">
-              Seu plano atual permite monitorar até 5 CNPJs simultaneamente.
-            </p>
-          </div>
+          <Input
+            label="E-mail de contato"
+            type="email"
+            placeholder="financeiro@empresa.com.br"
+            value={form.emailContato}
+            onChange={(e) => setForm({ ...form, emailContato: e.target.value })}
+          />
         </form>
       </Modal>
     </div>
