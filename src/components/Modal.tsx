@@ -67,5 +67,3 @@ export const Modal = ({ isOpen, onClose, title, children, footer, size = 'md' }:
     </div>
   );
 };
-  );
-};
