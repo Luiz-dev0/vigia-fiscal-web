@@ -1,65 +1,45 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { LandingPage } from './pages/LandingPage';
-import { LoginPage } from './pages/LoginPage';
-import { RegisterPage } from './pages/RegisterPage';
-import { DashboardLayout } from './components/DashboardLayout';
-import { DashboardPage } from './pages/DashboardPage';
-import { CnpjsPage } from './pages/CnpjsPage';
-import { NfesPage } from './pages/NfesPage';
-import { NfeDetailPage } from './pages/NfeDetailPage';
-import { AlertsPage } from './pages/AlertsPage';
-import { SubscriptionPage } from './pages/SubscriptionPage';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { PrivateRoute } from '@/components/PrivateRoute';
+import { PublicRoute } from '@/components/PublicRoute';
+import { DashboardLayout } from '@/components/DashboardLayout';
+import { LandingPage } from '@/pages/LandingPage';
+import { LoginPage } from '@/pages/LoginPage';
+import { RegisterPage } from '@/pages/RegisterPage';
+import { DashboardPage } from '@/pages/DashboardPage';
+import { CnpjsPage } from '@/pages/CnpjsPage';
+import { NfesPage } from '@/pages/NfesPage';
+import { NfeDetailPage } from '@/pages/NfeDetailPage';
+import { AlertsPage } from '@/pages/AlertsPage';
+import { SubscriptionPage } from '@/pages/SubscriptionPage';
 
 export default function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
-        {/* Public Routes */}
+        {/* Pública sem redirecionamento */}
         <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
 
-        {/* Dashboard Routes */}
-        <Route path="/dashboard" element={
-          <DashboardLayout>
-            <DashboardPage />
-          </DashboardLayout>
-        } />
-        <Route path="/cnpjs" element={
-          <DashboardLayout>
-            <CnpjsPage />
-          </DashboardLayout>
-        } />
-        <Route path="/nfes" element={
-          <DashboardLayout>
-            <NfesPage />
-          </DashboardLayout>
-        } />
-        <Route path="/nfes/detail" element={
-          <DashboardLayout>
-            <NfeDetailPage />
-          </DashboardLayout>
-        } />
-        <Route path="/alerts" element={
-          <DashboardLayout>
-            <AlertsPage />
-          </DashboardLayout>
-        } />
-        <Route path="/subscription" element={
-          <DashboardLayout>
-            <SubscriptionPage />
-          </DashboardLayout>
-        } />
+        {/* Públicas — redireciona para /dashboard se já autenticado */}
+        <Route element={<PublicRoute />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Route>
 
-        {/* Fallback */}
+        {/* Privadas — redireciona para /login se não autenticado */}
+        <Route element={<PrivateRoute />}>
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/cnpjs" element={<CnpjsPage />} />
+            <Route path="/nfes" element={<NfesPage />} />
+            <Route path="/nfes/:id" element={<NfeDetailPage />} />
+            <Route path="/alerts" element={<AlertsPage />} />
+            <Route path="/subscription" element={<SubscriptionPage />} />
+          </Route>
+        </Route>
+
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
 
