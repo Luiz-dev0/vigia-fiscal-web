@@ -4,6 +4,7 @@ import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { Link, useNavigate } from 'react-router-dom';
 import { authService } from '../services/authService';
+import { useAuth } from '@/contexts/AuthContext';
 
 export const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -11,6 +12,7 @@ export const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { signIn } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,11 +20,11 @@ export const LoginPage = () => {
     setError('');
     try {
       const response = await authService.login({ email, senha });
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('user', JSON.stringify(response));
+      signIn(response.token, response);
       navigate('/dashboard');
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao entrar. Verifique suas credenciais.');
+    } catch (err: unknown) {
+      const apiErr = err as { message?: string };
+      setError(apiErr.message ?? 'Erro ao entrar. Verifique suas credenciais.');
     } finally {
       setLoading(false);
     }

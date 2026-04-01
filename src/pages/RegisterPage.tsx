@@ -4,6 +4,7 @@ import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { Link, useNavigate } from 'react-router-dom';
 import { authService } from '../services/authService';
+import { useAuth } from '@/contexts/AuthContext';
 
 export const RegisterPage = () => {
   const [nome, setNome] = useState('');
@@ -13,6 +14,7 @@ export const RegisterPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { signIn } = useAuth();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,11 +22,11 @@ export const RegisterPage = () => {
     setError('');
     try {
       const response = await authService.register({ nome, email, senha, whatsapp });
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('user', JSON.stringify(response));
+      signIn(response.token, response);
       navigate('/dashboard');
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao criar conta. Verifique os dados informados.');
+    } catch (err: unknown) {
+      const apiErr = err as { message?: string };
+      setError(apiErr.message ?? 'Erro ao criar conta. Verifique os dados informados.');
     } finally {
       setLoading(false);
     }
