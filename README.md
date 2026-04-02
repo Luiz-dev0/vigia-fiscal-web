@@ -1,20 +1,50 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Vigia Fiscal — Web
 
-# Run and deploy your AI Studio app
+Frontend do SaaS de monitoramento de NF-es em tempo real.
 
-This contains everything you need to run your app locally.
+## Stack
 
-View your app in AI Studio: https://ai.studio/apps/d60e5d4f-da35-41cc-8fc6-4e0c0f969235
+- React 19 + TypeScript
+- Vite 6
+- TailwindCSS v4
+- React Router v7
+- Axios
 
-## Run Locally
+## Desenvolvimento local
 
-**Prerequisites:**  Node.js
+```bash
+# Instalar dependências
+npm install
 
+# Criar arquivo de ambiente
+cp .env.example .env
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+# Iniciar servidor de desenvolvimento
+npm run dev
+```
+
+Acesse: http://localhost:3000
+
+O backend deve estar rodando em http://localhost:8080.
+
+## Build de produção
+
+```bash
+npm run build
+```
+
+## Docker
+
+```bash
+# Build da imagem
+docker build -t vigia-fiscal-web .
+
+# Rodar o container
+docker run -p 80:80 vigia-fiscal-web
+```
+
+## Variáveis de ambiente
+
+| Variável       | Descrição              | Padrão                  |
+|---------------|------------------------|-------------------------|
+| VITE_API_URL  | URL base da API        | http://localhost:8080   |
