@@ -20,6 +20,7 @@ import {
 import { Button } from '@/components/Button';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import dashboardPreview from '@/assets/dashboard-preview.png';
 
 const FAQItem = ({ question, answer }: { question: string, answer: string }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -120,10 +121,9 @@ export const LandingPage = () => {
             <div className="absolute -inset-1 bg-gradient-to-tr from-[#0056b3] to-blue-400 rounded-[2.5rem] blur opacity-20" />
             <div className="relative bg-white rounded-[2rem] p-2 shadow-2xl border border-gray-100 overflow-hidden group">
               <img
-                src="https://picsum.photos/seed/dashboard-v2/1200/900"
+                src={dashboardPreview}
                 alt="Dashboard Preview"
                 className="rounded-[1.5rem] w-full h-auto group-hover:scale-[1.02] transition-transform duration-700"
-                referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
@@ -235,7 +235,7 @@ export const LandingPage = () => {
                 price: '497',
                 desc: 'Potência total para grandes operações.',
                 features: ['CNPJs Ilimitados', 'API de Integração', 'Gerente de Conta', 'Histórico Ilimitado', 'Treinamento de Equipe'],
-                cta: 'Falar com Vendas',
+                cta: 'Assinar Enterprise',
                 popular: false
               }
             ].map((plan, i) => (
@@ -342,40 +342,21 @@ export const LandingPage = () => {
       {/* Footer */}
       <footer className="bg-white border-t border-gray-100 pt-24 pb-12">        
         <div className="max-w-7xl mx-auto px-6 space-y-16">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12">
-            <div className="col-span-2 space-y-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-12">
+            <div className="col-span-2 md:col-span-1 space-y-6">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="text-[#0056b3] w-8 h-8" />
                 <h1 className="font-bold text-2xl text-gray-900 tracking-tight">Vigia Fiscal</h1>
               </div>
               <p className="text-gray-500 text-sm leading-relaxed max-w-xs">    
-                A plataforma líder em monitoramento fiscal inteligente para empresas brasileiras. Segurança, agilidade e conformidade em um só lugar.
+                Monitoramento fiscal inteligente para empresas brasileiras.
               </p>
-              <div className="flex gap-4">
-                <div className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 hover:bg-blue-50 hover:text-[#0056b3] transition-colors cursor-pointer">
-                  <Globe className="w-5 h-5" />
-                </div>
-                <div className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 hover:bg-blue-50 hover:text-[#0056b3] transition-colors cursor-pointer">
-                  <Users className="w-5 h-5" />
-                </div>
-              </div>
             </div>
             <div className="space-y-6">
               <h5 className="text-xs font-bold text-gray-900 uppercase tracking-widest">Produto</h5>
               <ul className="space-y-4 text-sm font-medium text-gray-500">      
-                <li><a href="#" className="hover:text-[#0056b3]">Funcionalidades</a></li>
-                <li><a href="#" className="hover:text-[#0056b3]">Integrações</a></li>
-                <li><a href="#" className="hover:text-[#0056b3]">Preços</a></li>
-                <li><a href="#" className="hover:text-[#0056b3]">Changelog</a></li>
-              </ul>
-            </div>
-            <div className="space-y-6">
-              <h5 className="text-xs font-bold text-gray-900 uppercase tracking-widest">Empresa</h5>
-              <ul className="space-y-4 text-sm font-medium text-gray-500">      
-                <li><a href="#" className="hover:text-[#0056b3]">Sobre Nós</a></li>
-                <li><a href="#" className="hover:text-[#0056b3]">Carreiras</a></li>
-                <li><a href="#" className="hover:text-[#0056b3]">Blog</a></li>  
-                <li><a href="#" className="hover:text-[#0056b3]">Contato</a></li>
+                <li><a href="#features" className="hover:text-[#0056b3]">Funcionalidades</a></li>
+                <li><a href="#pricing" className="hover:text-[#0056b3]">Preços</a></li>
               </ul>
             </div>
             <div className="space-y-6">
@@ -383,8 +364,6 @@ export const LandingPage = () => {
               <ul className="space-y-4 text-sm font-medium text-gray-500">      
                 <li><a href="#" className="hover:text-[#0056b3]">Privacidade</a></li>
                 <li><a href="#" className="hover:text-[#0056b3]">Termos de Uso</a></li>
-                <li><a href="#" className="hover:text-[#0056b3]">Cookies</a></li>
-                <li><a href="#" className="hover:text-[#0056b3]">Segurança</a></li>
               </ul>
             </div>
           </div>
