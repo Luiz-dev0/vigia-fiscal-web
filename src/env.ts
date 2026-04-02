@@ -1,3 +1,11 @@
+interface ImportMetaEnv {
+  readonly VITE_API_URL: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
+
 export const env = {
   apiUrl: import.meta.env.VITE_API_URL ?? 'http://localhost:8080',
 } as const;

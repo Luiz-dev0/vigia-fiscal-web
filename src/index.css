@@ -1,48 +1,36 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
-  
-  --color-vigia-blue: #0056b3;
-  --color-vigia-navy: #001a33;
-  --color-vigia-bg: #f8fafc;
-  
-  --radius-2xl: 1rem;
-  --radius-3xl: 1.5rem;
-  --radius-4xl: 2rem;
+
+  --color-vigia-blue: #1565C0;
+  --color-vigia-navy: #0D1B3E;
+  --color-vigia-bg:   #F5F7FA;
 }
 
 @layer base {
   body {
     @apply font-sans text-slate-900 bg-vigia-bg antialiased;
   }
-  
+
   h1, h2, h3, h4, h5, h6 {
     @apply tracking-tight;
+  }
+
+  * {
+    @apply box-border;
   }
 }
 
 @layer components {
-  .glass-card {
-    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-xl;
-  }
-  
   .dashboard-card {
-    @apply bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300;
+    @apply bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-200;
   }
-  
+
   .status-badge {
-    @apply px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider;
+    @apply px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider border;
   }
 }
 
-@keyframes bounce-slow {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-.animate-bounce-slow {
-  animation: bounce-slow 3s ease-in-out infinite;
-}
