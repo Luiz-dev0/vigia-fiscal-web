@@ -21,14 +21,14 @@ import { Button } from '@/components/Button';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import dashboardPreview from '@/assets/dashboard-preview.png';
-
+ 
 const FAQItem = ({ question, answer }: { question: string, answer: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="border-b border-gray-100 py-6">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex justify-between items-center w-full text-left group"    
+        className="flex justify-between items-center w-full text-left group"
       >
         <span className="text-lg font-bold text-gray-900 group-hover:text-[#0056b3] transition-colors">{question}</span>
         {isOpen ? <ChevronUp className="text-gray-400" /> : <ChevronDown className="text-gray-400" />}
@@ -41,7 +41,7 @@ const FAQItem = ({ question, answer }: { question: string, answer: string }) => 
     </div>
   );
 };
-
+ 
 export const LandingPage = () => {
   return (
     <div className="min-h-screen bg-white selection:bg-blue-100 selection:text-[#0056b3]">
@@ -67,14 +67,14 @@ export const LandingPage = () => {
           </div>
         </div>
       </header>
-
+ 
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-16 pb-24 md:pt-24 md:pb-32">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 overflow-hidden">
           <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-50 rounded-full blur-[120px] opacity-60" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-100 rounded-full blur-[120px] opacity-40" />
         </div>
-
+ 
         <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-[#0056b3] text-[10px] font-bold uppercase tracking-widest border border-blue-100">
@@ -84,7 +84,7 @@ export const LandingPage = () => {
             <h2 className="text-5xl md:text-7xl font-extrabold text-gray-900 leading-[1.05] tracking-tight">
               O Cofre Digital da sua <span className="text-[#0056b3]">Gestão Fiscal</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-xl leading-relaxed">      
+            <p className="text-xl text-gray-600 max-w-xl leading-relaxed">
               Monitore todas as suas notas fiscais em tempo real, receba alertas via WhatsApp e garanta conformidade total com a SEFAZ em uma única plataforma robusta.
             </p>
             <div className="flex flex-wrap gap-4">
@@ -110,7 +110,7 @@ export const LandingPage = () => {
                 ))}
               </div>
               <div className="text-sm">
-                <div className="flex items-center gap-1 text-amber-500">        
+                <div className="flex items-center gap-1 text-amber-500">
                   {[1, 2, 3, 4, 5].map(i => <Zap key={i} className="w-3 h-3 fill-current" />)}
                 </div>
                 <p className="text-gray-500 font-medium">+2.000 contadores confiam</p>
@@ -127,7 +127,7 @@ export const LandingPage = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
-
+ 
             {/* Floating Elements */}
             <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl border border-gray-50 animate-bounce-slow hidden md:block">
               <div className="flex items-center gap-3">
@@ -143,7 +143,7 @@ export const LandingPage = () => {
           </div>
         </div>
       </section>
-
+ 
       {/* Features Grid */}
       <section id="features" className="py-24 md:py-32">
         <div className="max-w-7xl mx-auto px-6 space-y-20">
@@ -153,7 +153,7 @@ export const LandingPage = () => {
               Tudo o que você precisa para um <span className="italic text-[#0056b3]">compliance</span> impecável.
             </h2>
           </div>
-
+ 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
@@ -200,9 +200,9 @@ export const LandingPage = () => {
           </div>
         </div>
       </section>
-
+ 
       {/* Pricing */}
-      <section id="pricing" className="py-24 md:py-32">
+      <section id="pricing" className="py-24 md:py-32 bg-gray-50/50">
         <div className="max-w-7xl mx-auto px-6 space-y-20 text-center">
           <div className="max-w-3xl mx-auto space-y-4">
             <h3 className="text-[10px] font-bold text-[#0056b3] uppercase tracking-[0.3em]">Preços</h3>
@@ -211,30 +211,36 @@ export const LandingPage = () => {
             </h2>
             <p className="text-gray-500 text-lg">Comece grátis e mude de plano quando precisar. Sem fidelidade.</p>
           </div>
-
-          <div className="grid md:grid-cols-3 gap-8 text-left">
+ 
+          <div className="grid md:grid-cols-3 gap-8 text-left max-w-5xl mx-auto">
             {[
               {
                 name: 'Básico',
                 price: '97',
+                badge: null,
                 desc: 'Para monitoramento individual simples.',
                 features: ['1 CNPJ monitorado', 'Alertas por E-mail', 'Suporte via Ticket', 'Histórico de 3 meses'],
+                trial: '7 dias grátis no plano Básico',
                 cta: 'Começar Grátis',
                 popular: false
               },
               {
                 name: 'Pro',
                 price: '197',
+                badge: 'Popular',
                 desc: 'Escalabilidade para pequenos escritórios.',
                 features: ['Até 5 CNPJs', 'Alertas WhatsApp + E-mail', 'Suporte Prioritário', 'Histórico de 12 meses', 'Relatórios Mensais'],
+                trial: null,
                 cta: 'Assinar Pro',
                 popular: true
               },
               {
                 name: 'Enterprise',
                 price: '497',
+                badge: null,
                 desc: 'Potência total para grandes operações.',
                 features: ['CNPJs Ilimitados', 'API de Integração', 'Gerente de Conta', 'Histórico Ilimitado', 'Treinamento de Equipe'],
+                trial: null,
                 cta: 'Assinar Enterprise',
                 popular: false
               }
@@ -242,34 +248,46 @@ export const LandingPage = () => {
               <div
                 key={i}
                 className={cn(
-                  "p-10 rounded-[2.5rem] border transition-all duration-500 space-y-8 flex flex-col",
-                  plan.popular ? "border-[#0056b3] bg-white shadow-2xl scale-105 z-10" : "border-gray-100 bg-gray-50/50 hover:bg-white hover:shadow-xl"
+                  "p-10 rounded-[2.5rem] border transition-all duration-500 space-y-8 flex flex-col bg-white",
+                  plan.popular ? "border-[#0056b3] shadow-2xl shadow-blue-900/10 scale-105 z-10" : "border-gray-100 hover:shadow-xl"
                 )}
               >
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <h4 className="text-xl font-bold text-gray-900">{plan.name}</h4>
-                    {plan.popular && <span className="bg-blue-50 text-[#0056b3] text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Popular</span>}
+                    {plan.badge && (
+                      <span className="bg-blue-50 text-[#0056b3] text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">
+                        {plan.badge}
+                      </span>
+                    )}
                   </div>
                   <p className="text-gray-500 text-xs leading-relaxed">{plan.desc}</p>
                   <div className="flex items-baseline gap-1 pt-4">
-                    <span className="text-sm font-bold text-gray-400">R$</span> 
+                    <span className="text-sm font-bold text-gray-400">R$</span>
                     <span className="text-5xl font-extrabold text-gray-900">{plan.price}</span>
                     <span className="text-sm font-bold text-gray-400">/mês</span>
                   </div>
+                  {plan.trial && (
+                    <p className="text-xs font-bold text-[#0056b3] bg-blue-50 px-3 py-1.5 rounded-lg inline-block">
+                      ✦ {plan.trial}
+                    </p>
+                  )}
                 </div>
-
+ 
                 <div className="flex-1 space-y-4">
                   {plan.features.map(f => (
                     <div key={f} className="flex gap-3 items-center text-sm font-medium text-gray-700">
-                      <CheckCircle2 className="w-4 h-4 text-[#0056b3]" />       
+                      <CheckCircle2 className="w-4 h-4 text-[#0056b3] shrink-0" />
                       {f}
                     </div>
                   ))}
                 </div>
-
+ 
                 <Link to="/register">
-                  <Button variant={plan.popular ? 'primary' : 'outline'} className="w-full py-6 font-bold text-lg rounded-2xl">
+                  <Button
+                    variant={plan.popular ? 'primary' : 'outline'}
+                    className="w-full py-6 font-bold text-lg rounded-2xl"
+                  >
                     {plan.cta}
                   </Button>
                 </Link>
@@ -278,15 +296,15 @@ export const LandingPage = () => {
           </div>
         </div>
       </section>
-
+ 
       {/* FAQ */}
-      <section id="faq" className="py-24 bg-gray-50/50">
+      <section id="faq" className="py-24">
         <div className="max-w-4xl mx-auto px-6 space-y-16">
           <div className="text-center space-y-4">
             <h3 className="text-[10px] font-bold text-[#0056b3] uppercase tracking-[0.3em]">Dúvidas Frequentes</h3>
             <h2 className="text-4xl font-extrabold text-gray-900">Ainda tem perguntas?</h2>
           </div>
-
+ 
           <div className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-sm border border-gray-100">
             <FAQItem
               question="Preciso de certificado digital para usar?"
@@ -294,10 +312,11 @@ export const LandingPage = () => {
             />
             <FAQItem
               question="Como funciona o período de teste grátis?"
-              answer="Você tem 14 dias para testar todas as funcionalidades do plano Pro sem custo algum. Não pedimos cartão de crédito para começar. Se gostar, basta escolher um plano ao final do período."
+              // Corrigido: 14 → 7 dias, trial apenas no plano Básico
+              answer="Você tem 7 dias para testar o plano Básico (1 CNPJ) sem custo algum. Não pedimos cartão de crédito para começar. Se gostar, basta escolher um plano ao final do período para continuar monitorando."
             />
             <FAQItem
-              question="Posso cancelar minha assinatura a qualquer momento?"    
+              question="Posso cancelar minha assinatura a qualquer momento?"
               answer="Sim! Não trabalhamos com contratos de fidelidade. Você pode cancelar sua assinatura diretamente pelo painel de controle a qualquer momento, sem taxas ocultas."
             />
             <FAQItem
@@ -311,7 +330,7 @@ export const LandingPage = () => {
           </div>
         </div>
       </section>
-
+ 
       {/* Final CTA */}
       <section className="py-24 md:py-32">
         <div className="max-w-7xl mx-auto px-6">
@@ -321,11 +340,12 @@ export const LandingPage = () => {
               <h2 className="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight">
                 Pronto para blindar sua gestão fiscal?
               </h2>
+              {/* Corrigido: 14 → 7 dias */}
               <p className="text-xl text-blue-100 font-medium opacity-90">
-                Junte-se a milhares de empresas que já automatizaram seu compliance. Comece seu trial de 14 dias agora.
+                Junte-se a milhares de empresas que já automatizaram seu compliance. Comece seu trial de 7 dias agora.
               </p>
             </div>
-            <div className="flex flex-wrap justify-center gap-6 relative z-10"> 
+            <div className="flex flex-wrap justify-center gap-6 relative z-10">
               <Link to="/register">
                 <Button variant="secondary" size="lg" className="px-12 py-8 text-xl font-bold shadow-2xl hover:scale-105 transition-transform">
                   Criar Minha Conta Grátis
@@ -338,9 +358,9 @@ export const LandingPage = () => {
           </div>
         </div>
       </section>
-
+ 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-100 pt-24 pb-12">        
+      <footer className="bg-white border-t border-gray-100 pt-24 pb-12">
         <div className="max-w-7xl mx-auto px-6 space-y-16">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-12">
             <div className="col-span-2 md:col-span-1 space-y-6">
@@ -348,26 +368,26 @@ export const LandingPage = () => {
                 <ShieldCheck className="text-[#0056b3] w-8 h-8" />
                 <h1 className="font-bold text-2xl text-gray-900 tracking-tight">Vigia Fiscal</h1>
               </div>
-              <p className="text-gray-500 text-sm leading-relaxed max-w-xs">    
+              <p className="text-gray-500 text-sm leading-relaxed max-w-xs">
                 Monitoramento fiscal inteligente para empresas brasileiras.
               </p>
             </div>
             <div className="space-y-6">
               <h5 className="text-xs font-bold text-gray-900 uppercase tracking-widest">Produto</h5>
-              <ul className="space-y-4 text-sm font-medium text-gray-500">      
+              <ul className="space-y-4 text-sm font-medium text-gray-500">
                 <li><a href="#features" className="hover:text-[#0056b3]">Funcionalidades</a></li>
                 <li><a href="#pricing" className="hover:text-[#0056b3]">Preços</a></li>
               </ul>
             </div>
             <div className="space-y-6">
               <h5 className="text-xs font-bold text-gray-900 uppercase tracking-widest">Legal</h5>
-              <ul className="space-y-4 text-sm font-medium text-gray-500">      
+              <ul className="space-y-4 text-sm font-medium text-gray-500">
                 <li><a href="#" className="hover:text-[#0056b3]">Privacidade</a></li>
                 <li><a href="#" className="hover:text-[#0056b3]">Termos de Uso</a></li>
               </ul>
             </div>
           </div>
-
+ 
           <div className="pt-12 border-t border-gray-50 flex flex-col md:flex-row justify-between items-center gap-6">
             <p className="text-xs text-gray-400 font-medium">
               © 2026 Vigia Fiscal. Todos os direitos reservados.
