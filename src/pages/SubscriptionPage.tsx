@@ -39,6 +39,14 @@ function nomePlanoLegivel(plano: string | null) {
   return plano ? (map[plano.toUpperCase()] ?? plano) : '—';
 }
  
+// FIX #1: Mapa explícito de nome → chave sem acento.
+// Evita "Básico".toUpperCase() → "BÁSICO" que falhava no lookup do StripeProperties.
+const PLANO_KEY_MAP: Record<string, string> = {
+  'Básico':     'BASICO',
+  'Pro':        'PRO',
+  'Enterprise': 'ENTERPRISE',
+};
+ 
 // ─── Banner de status no topo ─────────────────────────────────────────────────
  
 function StatusBanner({ status }: { status: StatusAssinaturaResponse }) {
@@ -173,7 +181,12 @@ function AssinaturaAtiva({
         </div>
  
         <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
-          <Button variant="outline" className="sm:ml-auto text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 font-bold" onClick={onCancelar} loading={cancelando}>
+          <Button
+            variant="outline"
+            className="sm:ml-auto text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 font-bold"
+            onClick={onCancelar}
+            loading={cancelando}
+          >
             Cancelar assinatura
           </Button>
         </div>
@@ -225,7 +238,6 @@ function GradePlanos({
         </p>
       </div>
  
-      {/* pt-6 reserva espaço para o badge do Pro não ser cortado */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-6 items-stretch">
         {plans.map((plan) => {
           const isPro = plan.nome.toLowerCase() === 'pro';
@@ -245,7 +257,6 @@ function GradePlanos({
                   : 'border-slate-200 shadow-sm hover:shadow-lg'
               )}
             >
-              {/* Badge em fluxo normal: ocupa altura fixa nos 3 cards para alinhar tudo abaixo */}
               <div className="h-7 flex items-center justify-center mb-2">
                 {isPro && (
                   <span className="bg-[#0056b3] text-white text-[10px] font-black uppercase tracking-widest px-4 py-1 rounded-full shadow-md whitespace-nowrap">
@@ -267,7 +278,6 @@ function GradePlanos({
               </div>
  
               <div className="flex-1 space-y-3 mb-8">
-                {/* Linha de CNPJs sempre em destaque */}
                 <div className="flex items-center gap-3">
                   <CheckCircle2 className="w-4 h-4 text-[#0056b3] shrink-0" />
                   <span className="text-sm font-bold text-slate-700">{cnpjLabel}</span>
@@ -315,14 +325,33 @@ export function SubscriptionPage() {
       .finally(() => setLoading(false));
   }, []);
  
+  // FIX #1: usa PLANO_KEY_MAP para garantir chave sem acento (ex: "BASICO" e não "BÁSICO").
+  // FIX #2: redireciona para checkoutUrl do Stripe após criar a assinatura.
+  // FIX #3: console.error no catch para debug visível no DevTools.
   async function handleSubscribe(priceId: string) {
     setSubmitting(priceId);
     try {
-      await billingService.assinar({ plan: priceId });
-      // Recarrega status após assinatura
+      const plano = plans.find((p) => p.priceId === priceId);
+      if (!plano) throw new Error('Plano não encontrado');
+ 
+      const planKey = PLANO_KEY_MAP[plano.nome] ?? plano.nome.toUpperCase();
+      console.log('[handleSubscribe] planKey enviado:', planKey);
+ 
+      const response = await billingService.assinar({ plan: planKey });
+      console.log('[handleSubscribe] resposta:', response);
+ 
+      // FIX #2: redireciona para o Stripe Checkout se a URL for retornada
+      if (response.checkoutUrl) {
+        window.location.href = response.checkoutUrl;
+        return; // interrompe — o usuário saiu da página
+      }
+ 
+      // Fallback: sem checkout (ex: ambiente de teste sem Stripe real)
       const novoStatus = await billingService.getStatus();
       setStatus(novoStatus);
-    } catch {
+    } catch (err) {
+      // FIX #3: erro agora sempre aparece no console para facilitar debug
+      console.error('[handleSubscribe] erro capturado:', err);
       alert('Erro ao processar assinatura. Tente novamente.');
     } finally {
       setSubmitting(null);
@@ -336,7 +365,8 @@ export function SubscriptionPage() {
       await billingService.cancelar();
       const novoStatus = await billingService.getStatus();
       setStatus(novoStatus);
-    } catch {
+    } catch (err) {
+      console.error('[handleCancelar] erro capturado:', err);
       alert('Erro ao cancelar assinatura. Tente novamente.');
     } finally {
       setCancelando(false);
@@ -360,10 +390,8 @@ export function SubscriptionPage() {
  
   return (
     <div className="space-y-8 w-full">
-      {/* Banner de status (trial, expirado, ativo, inadimplente) */}
       {status && <StatusBanner status={status} />}
  
-      {/* Assinatura ativa: mostra detalhes + botão cancelar */}
       {status?.estado === 'ACTIVE' && (
         <AssinaturaAtiva
           status={status}
@@ -372,7 +400,6 @@ export function SubscriptionPage() {
         />
       )}
  
-      {/* Trial / expirado / cancelado: mostra grade de planos */}
       {mostrarPlanos && (
         <GradePlanos
           plans={plans}
@@ -381,7 +408,6 @@ export function SubscriptionPage() {
         />
       )}
  
-      {/* Selos de segurança */}
       <div className="flex flex-wrap justify-center gap-10 pt-4 opacity-40">
         {[
           { icon: ShieldCheck, label: 'LGPD Compliant' },

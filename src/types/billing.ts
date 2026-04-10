@@ -10,11 +10,14 @@ export interface AssinaturaRequest {
   plan: string;
 }
 
+// FIX #2: campo checkoutUrl adicionado — backend retorna a URL do Stripe Checkout
+// para o usuário completar o pagamento após criar a assinatura.
 export interface AssinaturaResponse {
   subscriptionId: string;
   status: SubscriptionStatus;
   plan: string;
   currentPeriodEnd: string;
+  checkoutUrl: string | null;
 }
 
 export interface PlanoResponse {

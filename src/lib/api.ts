@@ -14,7 +14,7 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = sessionStorage.getItem('vf_token');
+  const token = localStorage.getItem('vf_token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -25,8 +25,8 @@ api.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
     if (error.response?.status === 401) {
-      sessionStorage.removeItem('vf_token');
-      sessionStorage.removeItem('vf_user');
+      localStorage.removeItem('vf_token');
+      localStorage.removeItem('vf_user');
       window.location.href = '/login';
     }
     const apiError: ApiError = {

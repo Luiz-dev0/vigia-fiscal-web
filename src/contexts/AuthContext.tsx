@@ -18,16 +18,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storedToken = sessionStorage.getItem('vf_token');
-    const storedUser = sessionStorage.getItem('vf_user');
+    const storedToken = localStorage.getItem('vf_token');
+    const storedUser = localStorage.getItem('vf_user');
 
     if (storedToken && storedUser) {
       try {
         setToken(storedToken);
         setUser(JSON.parse(storedUser) as TokenResponse);
       } catch {
-        sessionStorage.removeItem('vf_token');
-        sessionStorage.removeItem('vf_user');
+        localStorage.removeItem('vf_token');
+        localStorage.removeItem('vf_user');
       }
     }
 
@@ -35,15 +35,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   function signIn(newToken: string, newUser: TokenResponse) {
-    sessionStorage.setItem('vf_token', newToken);
-    sessionStorage.setItem('vf_user', JSON.stringify(newUser));
+    localStorage.setItem('vf_token', newToken);
+    localStorage.setItem('vf_user', JSON.stringify(newUser));
     setToken(newToken);
     setUser(newUser);
   }
 
   function signOut() {
-    sessionStorage.removeItem('vf_token');
-    sessionStorage.removeItem('vf_user');
+    localStorage.removeItem('vf_token');
+    localStorage.removeItem('vf_user');
     setToken(null);
     setUser(null);
   }
