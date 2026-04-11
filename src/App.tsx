@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { PrivateRoute } from '@/components/PrivateRoute';
 import { PublicRoute } from '@/components/PublicRoute';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { CrispChat } from '@/components/CrispChat';
 
 const LandingPage      = lazy(() => import('@/pages/LandingPage').then(m => ({ default: m.LandingPage })));
 const LoginPage        = lazy(() => import('@/pages/LoginPage').then(m => ({ default: m.LoginPage })));
@@ -30,6 +31,7 @@ function PageLoader() {
 export default function App() {
   return (
     <BrowserRouter>
+      <CrispChat />
       <Suspense fallback={<PageLoader />}>
         <Routes>
           {/* Pública */}
@@ -44,11 +46,11 @@ export default function App() {
           {/* Privadas — redireciona para /login se não autenticado */}
           <Route element={<PrivateRoute />}>
             <Route element={<DashboardLayout />}>
-              <Route path="/dashboard"   element={<DashboardPage />} />
-              <Route path="/cnpjs"       element={<CnpjsPage />} />
-              <Route path="/nfes"        element={<NfesPage />} />
-              <Route path="/nfes/:id"    element={<NfeDetailPage />} />
-              <Route path="/alerts"      element={<AlertsPage />} />
+              <Route path="/dashboard"    element={<DashboardPage />} />
+              <Route path="/cnpjs"        element={<CnpjsPage />} />
+              <Route path="/nfes"         element={<NfesPage />} />
+              <Route path="/nfes/:id"     element={<NfeDetailPage />} />
+              <Route path="/alerts"       element={<AlertsPage />} />
               <Route path="/subscription" element={<SubscriptionPage />} />
             </Route>
           </Route>
@@ -59,4 +61,3 @@ export default function App() {
     </BrowserRouter>
   );
 }
-
