@@ -14,6 +14,7 @@ export function RegisterPage() {
   const [whatsapp, setWhatsapp] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [aceitouTermos, setAceitouTermos] = useState(false);
   const { signIn } = useAuth();
   const navigate = useNavigate();
 
@@ -142,6 +143,27 @@ export function RegisterPage() {
                   required
                   minLength={8}
                 />
+              </div>
+
+              <div className="flex items-start gap-3">
+                <input
+                  id="termos"
+                  type="checkbox"
+                  checked={aceitouTermos}
+                  onChange={(e) => setAceitouTermos(e.target.checked)}
+                  className="mt-1 w-4 h-4 accent-vigia-blue cursor-pointer shrink-0"
+                  required
+                />
+                <label htmlFor="termos" className="text-xs font-medium text-slate-500 leading-relaxed">
+                  Li e aceito os{' '}
+                  <Link to="/termos" className="text-vigia-blue hover:underline font-bold">
+                    Termos de Uso
+                  </Link>{' '}
+                  e a{' '}
+                  <Link to="/privacidade" className="text-vigia-blue hover:underline font-bold">
+                    Política de Privacidade
+                  </Link>
+                </label>
               </div>
 
               <Button

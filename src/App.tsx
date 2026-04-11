@@ -14,6 +14,8 @@ const NfesPage         = lazy(() => import('@/pages/NfesPage').then(m => ({ defa
 const NfeDetailPage    = lazy(() => import('@/pages/NfeDetailPage').then(m => ({ default: m.NfeDetailPage })));
 const AlertsPage       = lazy(() => import('@/pages/AlertsPage').then(m => ({ default: m.AlertsPage })));
 const SubscriptionPage = lazy(() => import('@/pages/SubscriptionPage').then(m => ({ default: m.SubscriptionPage })));
+const TermosDeUso         = lazy(() => import('@/pages/TermosDeUso').then(m => ({ default: m.TermosDeUso })));
+const PoliticaDePrivacidade = lazy(() => import('@/pages/PoliticaDePrivacidade').then(m => ({ default: m.PoliticaDePrivacidade })));
 
 function PageLoader() {
   return (
@@ -41,6 +43,8 @@ export default function App() {
           <Route element={<PublicRoute />}>
             <Route path="/login"    element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/termos"      element={<TermosDeUso />} />
+            <Route path="/privacidade" element={<PoliticaDePrivacidade />} />
           </Route>
 
           {/* Privadas — redireciona para /login se não autenticado */}

@@ -21,7 +21,7 @@ import { Button } from '@/components/Button';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import dashboardPreview from '@/assets/dashboard-preview.png';
- 
+
 const FAQItem = ({ question, answer }: { question: string, answer: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -41,7 +41,7 @@ const FAQItem = ({ question, answer }: { question: string, answer: string }) => 
     </div>
   );
 };
- 
+
 export const LandingPage = () => {
   return (
     <div className="min-h-screen bg-white selection:bg-blue-100 selection:text-[#0056b3]">
@@ -67,14 +67,14 @@ export const LandingPage = () => {
           </div>
         </div>
       </header>
- 
+
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-16 pb-24 md:pt-24 md:pb-32">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 overflow-hidden">
           <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-50 rounded-full blur-[120px] opacity-60" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-100 rounded-full blur-[120px] opacity-40" />
         </div>
- 
+
         <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-[#0056b3] text-[10px] font-bold uppercase tracking-widest border border-blue-100">
@@ -98,24 +98,7 @@ export const LandingPage = () => {
                 Ver Demo
               </Button>
             </div>
-            <div className="flex items-center gap-8 pt-4">
-              <div className="flex -space-x-3">
-                {[1, 2, 3, 4].map(i => (
-                  <img
-                    key={i}
-                    src={`https://i.pravatar.cc/150?u=${i}`}
-                    className="w-10 h-10 rounded-full border-2 border-white shadow-sm"
-                    alt="User"
-                  />
-                ))}
-              </div>
-              <div className="text-sm">
-                <div className="flex items-center gap-1 text-amber-500">
-                  {[1, 2, 3, 4, 5].map(i => <Zap key={i} className="w-3 h-3 fill-current" />)}
-                </div>
-                <p className="text-gray-500 font-medium">+2.000 contadores confiam</p>
-              </div>
-            </div>
+            
           </div>
           <div className="relative lg:ml-8">
             <div className="absolute -inset-1 bg-gradient-to-tr from-[#0056b3] to-blue-400 rounded-[2.5rem] blur opacity-20" />
@@ -127,7 +110,7 @@ export const LandingPage = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
- 
+
             {/* Floating Elements */}
             <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl border border-gray-50 animate-bounce-slow hidden md:block">
               <div className="flex items-center gap-3">
@@ -143,7 +126,7 @@ export const LandingPage = () => {
           </div>
         </div>
       </section>
- 
+
       {/* Features Grid */}
       <section id="features" className="py-24 md:py-32">
         <div className="max-w-7xl mx-auto px-6 space-y-20">
@@ -153,7 +136,7 @@ export const LandingPage = () => {
               Tudo o que você precisa para um <span className="italic text-[#0056b3]">compliance</span> impecável.
             </h2>
           </div>
- 
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
@@ -200,7 +183,7 @@ export const LandingPage = () => {
           </div>
         </div>
       </section>
- 
+
       {/* Pricing */}
       <section id="pricing" className="py-24 md:py-32 bg-gray-50/50">
         <div className="max-w-7xl mx-auto px-6 space-y-20 text-center">
@@ -211,7 +194,7 @@ export const LandingPage = () => {
             </h2>
             <p className="text-gray-500 text-lg">Comece grátis e mude de plano quando precisar. Sem fidelidade.</p>
           </div>
- 
+
           <div className="grid md:grid-cols-3 gap-8 text-left max-w-5xl mx-auto">
             {[
               {
@@ -273,7 +256,7 @@ export const LandingPage = () => {
                     </p>
                   )}
                 </div>
- 
+
                 <div className="flex-1 space-y-4">
                   {plan.features.map(f => (
                     <div key={f} className="flex gap-3 items-center text-sm font-medium text-gray-700">
@@ -282,7 +265,7 @@ export const LandingPage = () => {
                     </div>
                   ))}
                 </div>
- 
+
                 <Link to="/register">
                   <Button
                     variant={plan.popular ? 'primary' : 'outline'}
@@ -296,7 +279,7 @@ export const LandingPage = () => {
           </div>
         </div>
       </section>
- 
+
       {/* FAQ */}
       <section id="faq" className="py-24">
         <div className="max-w-4xl mx-auto px-6 space-y-16">
@@ -304,7 +287,7 @@ export const LandingPage = () => {
             <h3 className="text-[10px] font-bold text-[#0056b3] uppercase tracking-[0.3em]">Dúvidas Frequentes</h3>
             <h2 className="text-4xl font-extrabold text-gray-900">Ainda tem perguntas?</h2>
           </div>
- 
+
           <div className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-sm border border-gray-100">
             <FAQItem
               question="Preciso de certificado digital para usar?"
@@ -330,7 +313,7 @@ export const LandingPage = () => {
           </div>
         </div>
       </section>
- 
+
       {/* Final CTA */}
       <section className="py-24 md:py-32">
         <div className="max-w-7xl mx-auto px-6">
@@ -351,14 +334,19 @@ export const LandingPage = () => {
                   Criar Minha Conta Grátis
                 </Button>
               </Link>
-              <Button variant="ghost" size="lg" className="px-12 py-8 text-xl font-bold text-white hover:bg-white/10 border border-white/20">
+              <Button
+                variant="ghost"
+                size="lg"
+                className="px-12 py-8 text-xl font-bold text-white hover:bg-white/10 border border-white/20"
+                onClick={() => window.$crisp?.push(['do', 'chat:open'])}
+              >
                 Falar com Especialista
               </Button>
             </div>
           </div>
         </div>
       </section>
- 
+
       {/* Footer */}
       <footer className="bg-white border-t border-gray-100 pt-24 pb-12">
         <div className="max-w-7xl mx-auto px-6 space-y-16">
@@ -382,12 +370,12 @@ export const LandingPage = () => {
             <div className="space-y-6">
               <h5 className="text-xs font-bold text-gray-900 uppercase tracking-widest">Legal</h5>
               <ul className="space-y-4 text-sm font-medium text-gray-500">
-                <li><a href="#" className="hover:text-[#0056b3]">Privacidade</a></li>
-                <li><a href="#" className="hover:text-[#0056b3]">Termos de Uso</a></li>
+                <li><Link to="/privacidade" className="hover:text-[#0056b3]">Privacidade</Link></li>
+                <li><Link to="/termos" className="hover:text-[#0056b3]">Termos de Uso</Link></li>
               </ul>
             </div>
           </div>
- 
+
           <div className="pt-12 border-t border-gray-50 flex flex-col md:flex-row justify-between items-center gap-6">
             <p className="text-xs text-gray-400 font-medium">
               © 2026 Vigia Fiscal. Todos os direitos reservados.
