@@ -93,10 +93,12 @@ export const LandingPage = () => {
                   Começar Trial Grátis
                 </Button>
               </Link>
-              <Button variant="outline" size="lg" className="px-10 py-6 text-lg font-bold flex gap-3 group">
-                <PlayCircle className="w-6 h-6 text-[#0056b3] group-hover:scale-110 transition-transform" />
-                Ver Demo
-              </Button>
+              <Link to="/register">
+                <Button variant="outline" size="lg" className="px-10 py-6 text-lg font-bold flex gap-3 group">
+                  <PlayCircle className="w-6 h-6 text-[#0056b3] group-hover:scale-110 transition-transform" />
+                  Ver Demo
+                </Button>
+              </Link>
             </div>
             
           </div>

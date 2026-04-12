@@ -95,7 +95,7 @@ export function RegisterPage() {
                 Criar sua conta
               </h3>
               <p className="text-slate-500 font-medium text-sm">
-                14 dias grátis, sem cartão de crédito.
+                7 dias grátis, sem cartão de crédito.
               </p>
             </div>
 
