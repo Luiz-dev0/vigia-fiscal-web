@@ -22,6 +22,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/vigia-fiscal-web:latest
+          tags: ghcr.io/luiz-dev0/vigia-fiscal-web:latest
           build-args: |
             VITE_API_URL=${{ secrets.VITE_API_URL }}
