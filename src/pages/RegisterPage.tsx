@@ -58,13 +58,13 @@ export function RegisterPage() {
                 Domine sua rotina <span className="text-vigia-blue">fiscal</span>.
               </h2>
               <p className="text-slate-400 font-medium leading-relaxed">
-                Junte-se a milhares de empresas que automatizaram seu monitoramento SEFAZ.
+                Monitore suas NF-es em tempo real com segurança e confiabilidade.
               </p>
             </div>
 
             <div className="space-y-4">
               {[
-                { title: 'Trial de 14 dias grátis', desc: 'Sem cartão de crédito necessário.' },
+                { title: 'Trial de 7 dias grátis', desc: 'Sem cartão de crédito necessário.' },
                 { title: 'Segurança máxima', desc: 'Criptografia de ponta a ponta.' },
                 { title: 'Suporte prioritário', desc: 'Time disponível para te ajudar.' },
               ].map((item) => (
