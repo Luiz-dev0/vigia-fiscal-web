@@ -15,7 +15,9 @@ import {
   Globe,
   FileText,
   Smartphone,
-  BarChart3
+  BarChart3,
+  Mail,
+  Clock
 } from 'lucide-react';
 import { Button } from '@/components/Button';
 import { Link } from 'react-router-dom';
@@ -100,7 +102,6 @@ export const LandingPage = () => {
                 </Button>
               </Link>
             </div>
-            
           </div>
           <div className="relative lg:ml-8">
             <div className="absolute -inset-1 bg-gradient-to-tr from-[#0056b3] to-blue-400 rounded-[2.5rem] blur opacity-20" />
@@ -113,7 +114,6 @@ export const LandingPage = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
 
-            {/* Floating Elements */}
             <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl border border-gray-50 animate-bounce-slow hidden md:block">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center text-green-600">
@@ -144,7 +144,7 @@ export const LandingPage = () => {
               {
                 icon: Search,
                 title: 'Consulta Automática SEFAZ',
-                desc: 'Nossos robôs consultam a SEFAZ 24/7, garantindo que nenhuma nota emitida contra seu CNPJ passe despercebida.'
+                desc: 'Nossos robôs consultam a SEFAZ a cada 5 minutos, garantindo que nenhuma nota emitida contra seu CNPJ passe despercebida.'
               },
               {
                 icon: Bell,
@@ -154,22 +154,22 @@ export const LandingPage = () => {
               {
                 icon: LayoutDashboard,
                 title: 'Gestão Multi-CNPJ',
-                desc: 'Ideal para contadores e holdings. Gerencie centenas de empresas em uma única interface organizada e intuitiva.'
+                desc: 'Ideal para contadores e holdings. Gerencie múltiplas empresas em uma única interface organizada e intuitiva.'
               },
               {
-                icon: FileText,
-                title: 'Manifestação do Destinatário',
-                desc: 'Realize a manifestação de ciência, confirmação ou desconhecimento da operação com apenas um clique.'
+                icon: Mail,
+                title: 'Alertas via E-mail',
+                desc: 'Receba notificações detalhadas por e-mail com todas as informações da nota fiscal detectada.'
               },
               {
-                icon: Smartphone,
-                title: 'App Mobile Nativo',
-                desc: 'Leve sua gestão fiscal no bolso. Acesse documentos e receba alertas onde quer que você esteja.'
+                icon: Clock,
+                title: 'Histórico de NF-es',
+                desc: 'Acesse o histórico completo das notas fiscais monitoradas com filtros por período, status e CNPJ.'
               },
               {
-                icon: BarChart3,
-                title: 'Relatórios Avançados',
-                desc: 'Exporte relatórios em PDF, Excel ou XML para facilitar o fechamento mensal e a auditoria fiscal.'
+                icon: ShieldCheck,
+                title: 'Painel Multi-CNPJ',
+                desc: 'Visualize o status de todos os CNPJs monitorados em um único painel com indicadores em tempo real.'
               }
             ].map((feature, i) => (
               <div key={i} className="group p-8 rounded-3xl border border-gray-100 hover:border-blue-100 hover:bg-blue-50/30 transition-all duration-300 space-y-6">
@@ -214,17 +214,17 @@ export const LandingPage = () => {
                 price: '197',
                 badge: 'Popular',
                 desc: 'Escalabilidade para pequenos escritórios.',
-                features: ['Até 5 CNPJs', 'Alertas WhatsApp + E-mail', 'Suporte Prioritário', 'Histórico de 12 meses', 'Relatórios Mensais'],
+                features: ['Até 5 CNPJs', 'Alertas WhatsApp + E-mail', 'Suporte Prioritário', 'Histórico de 12 meses'],
                 trial: null,
                 cta: 'Assinar Pro',
                 popular: true
               },
               {
                 name: 'Enterprise',
-                price: '497',
+                price: '297',
                 badge: null,
                 desc: 'Potência total para grandes operações.',
-                features: ['CNPJs Ilimitados', 'API de Integração', 'Gerente de Conta', 'Histórico Ilimitado', 'Treinamento de Equipe'],
+                features: ['CNPJs Ilimitados', 'Alertas WhatsApp + E-mail', 'Suporte Prioritário', 'Histórico Ilimitado'],
                 trial: null,
                 cta: 'Assinar Enterprise',
                 popular: false
@@ -297,7 +297,6 @@ export const LandingPage = () => {
             />
             <FAQItem
               question="Como funciona o período de teste grátis?"
-              // Corrigido: 14 → 7 dias, trial apenas no plano Básico
               answer="Você tem 7 dias para testar o plano Básico (1 CNPJ) sem custo algum. Não pedimos cartão de crédito para começar. Se gostar, basta escolher um plano ao final do período para continuar monitorando."
             />
             <FAQItem
@@ -325,9 +324,8 @@ export const LandingPage = () => {
               <h2 className="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight">
                 Pronto para blindar sua gestão fiscal?
               </h2>
-              {/* Corrigido: 14 → 7 dias */}
               <p className="text-xl text-blue-100 font-medium opacity-90">
-                Junte-se a milhares de empresas que já automatizaram seu compliance. Comece seu trial de 7 dias agora.
+                Automatize seu compliance fiscal e nunca mais perca uma nota. Comece seu trial de 7 dias agora.
               </p>
             </div>
             <div className="flex flex-wrap justify-center gap-6 relative z-10">
