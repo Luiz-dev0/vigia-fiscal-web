@@ -14,13 +14,13 @@ import { Button } from '@/components/Button';
 import { billingService } from '@/services/billingService';
 import { cn } from '@/lib/utils';
 import type { PlanoResponse, StatusAssinaturaResponse } from '@/types';
- 
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
- 
+
 function formatarPreco(preco: number) {
   return preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
- 
+
 function formatarData(iso: string | null) {
   if (!iso) return '—';
   return new Date(iso).toLocaleDateString('pt-BR', {
@@ -29,7 +29,7 @@ function formatarData(iso: string | null) {
     year: 'numeric',
   });
 }
- 
+
 function nomePlanoLegivel(plano: string | null) {
   const map: Record<string, string> = {
     BASICO: 'Básico',
@@ -38,17 +38,17 @@ function nomePlanoLegivel(plano: string | null) {
   };
   return plano ? (map[plano.toUpperCase()] ?? plano) : '—';
 }
- 
+
 // FIX #1: Mapa explícito de nome → chave sem acento.
 // Evita "Básico".toUpperCase() → "BÁSICO" que falhava no lookup do StripeProperties.
 const PLANO_KEY_MAP: Record<string, string> = {
-  'Básico':     'BASICO',
-  'Pro':        'PRO',
+  'Básico': 'BASICO',
+  'Pro': 'PRO',
   'Enterprise': 'ENTERPRISE',
 };
- 
+
 // ─── Banner de status no topo ─────────────────────────────────────────────────
- 
+
 function StatusBanner({ status }: { status: StatusAssinaturaResponse }) {
   if (status.estado === 'TRIAL') {
     const dias = status.diasRestantes ?? 0;
@@ -75,7 +75,7 @@ function StatusBanner({ status }: { status: StatusAssinaturaResponse }) {
       </div>
     );
   }
- 
+
   if (status.estado === 'TRIAL_EXPIRED') {
     return (
       <div className="bg-red-50 border-2 border-red-100 rounded-2xl p-5 flex items-center gap-4">
@@ -93,7 +93,7 @@ function StatusBanner({ status }: { status: StatusAssinaturaResponse }) {
       </div>
     );
   }
- 
+
   if (status.estado === 'OVERDUE') {
     return (
       <div className="bg-orange-50 border-2 border-orange-100 rounded-2xl p-5 flex items-center gap-4">
@@ -111,7 +111,7 @@ function StatusBanner({ status }: { status: StatusAssinaturaResponse }) {
       </div>
     );
   }
- 
+
   if (status.estado === 'ACTIVE') {
     return (
       <div className="bg-green-50 border-2 border-green-100 rounded-2xl p-5 flex items-center gap-4">
@@ -129,12 +129,12 @@ function StatusBanner({ status }: { status: StatusAssinaturaResponse }) {
       </div>
     );
   }
- 
+
   return null;
 }
- 
+
 // ─── Card de detalhes da assinatura ativa ─────────────────────────────────────
- 
+
 function AssinaturaAtiva({
   status,
   onCancelar,
@@ -152,7 +152,7 @@ function AssinaturaAtiva({
           Gerencie seu plano e informações de cobrança.
         </p>
       </div>
- 
+
       <Card className="p-8 space-y-6">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-4">
@@ -168,7 +168,7 @@ function AssinaturaAtiva({
             Ativo
           </span>
         </div>
- 
+
         <div className="grid sm:grid-cols-2 gap-4 pt-2">
           <div className="bg-slate-50 rounded-xl p-4">
             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Próxima cobrança</p>
@@ -179,7 +179,7 @@ function AssinaturaAtiva({
             <p className="text-sm font-bold text-green-700">Em dia</p>
           </div>
         </div>
- 
+
         <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
           <Button
             variant="outline"
@@ -194,9 +194,9 @@ function AssinaturaAtiva({
     </div>
   );
 }
- 
+
 // ─── Grade de planos (trial / expirado / cancelado) ───────────────────────────
- 
+
 function GradePlanos({
   plans,
   submitting,
@@ -218,17 +218,15 @@ function GradePlanos({
       'Alertas WhatsApp + E-mail',
       'Suporte Prioritário',
       'Histórico de 12 meses',
-      'Relatórios Mensais',
     ],
     enterprise: [
       'CNPJs Ilimitados',
-      'API de Integração',
-      'Gerente de Conta',
+      'Alertas WhatsApp + E-mail',
+      'Suporte Prioritário',
       'Histórico Ilimitado',
-      'Treinamento de Equipe',
     ],
   };
- 
+
   return (
     <div className="space-y-8">
       <div>
@@ -237,7 +235,7 @@ function GradePlanos({
           Sem fidelidade. Mude ou cancele quando quiser.
         </p>
       </div>
- 
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-6 items-stretch">
         {plans.map((plan) => {
           const isPro = plan.nome.toLowerCase() === 'pro';
@@ -246,7 +244,7 @@ function GradePlanos({
             plan.limiteCnpjs === 0
               ? 'CNPJs ilimitados'
               : `${plan.limiteCnpjs} CNPJ${plan.limiteCnpjs > 1 ? 's' : ''}`;
- 
+
           return (
             <div
               key={plan.priceId}
@@ -264,7 +262,7 @@ function GradePlanos({
                   </span>
                 )}
               </div>
- 
+
               <div className="space-y-3 mb-6">
                 <h3 className="text-lg font-black text-slate-900 uppercase tracking-tight">
                   {plan.nome}
@@ -276,7 +274,7 @@ function GradePlanos({
                   <span className="text-sm font-bold text-slate-400">/mês</span>
                 </div>
               </div>
- 
+
               <div className="flex-1 space-y-3 mb-8">
                 <div className="flex items-center gap-3">
                   <CheckCircle2 className="w-4 h-4 text-[#0056b3] shrink-0" />
@@ -289,7 +287,7 @@ function GradePlanos({
                   </div>
                 ))}
               </div>
- 
+
               <Button
                 variant={isPro ? 'primary' : 'outline'}
                 className="w-full h-12 font-bold rounded-xl"
@@ -305,16 +303,16 @@ function GradePlanos({
     </div>
   );
 }
- 
+
 // ─── Página principal ─────────────────────────────────────────────────────────
- 
+
 export function SubscriptionPage() {
   const [status, setStatus] = useState<StatusAssinaturaResponse | null>(null);
   const [plans, setPlans] = useState<PlanoResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState<string | null>(null);
   const [cancelando, setCancelando] = useState(false);
- 
+
   useEffect(() => {
     Promise.all([billingService.getStatus(), billingService.listarPlanos()])
       .then(([s, p]) => {
@@ -324,7 +322,7 @@ export function SubscriptionPage() {
       .catch(() => console.error('Erro ao carregar dados de assinatura'))
       .finally(() => setLoading(false));
   }, []);
- 
+
   // FIX #1: usa PLANO_KEY_MAP para garantir chave sem acento (ex: "BASICO" e não "BÁSICO").
   // FIX #2: redireciona para checkoutUrl do Stripe após criar a assinatura.
   // FIX #3: console.error no catch para debug visível no DevTools.
@@ -333,19 +331,19 @@ export function SubscriptionPage() {
     try {
       const plano = plans.find((p) => p.priceId === priceId);
       if (!plano) throw new Error('Plano não encontrado');
- 
+
       const planKey = PLANO_KEY_MAP[plano.nome] ?? plano.nome.toUpperCase();
       console.log('[handleSubscribe] planKey enviado:', planKey);
- 
+
       const response = await billingService.assinar({ plan: planKey });
       console.log('[handleSubscribe] resposta:', response);
- 
+
       // FIX #2: redireciona para o Stripe Checkout se a URL for retornada
       if (response.checkoutUrl) {
         window.location.href = response.checkoutUrl;
         return; // interrompe — o usuário saiu da página
       }
- 
+
       // Fallback: sem checkout (ex: ambiente de teste sem Stripe real)
       const novoStatus = await billingService.getStatus();
       setStatus(novoStatus);
@@ -357,7 +355,7 @@ export function SubscriptionPage() {
       setSubmitting(null);
     }
   }
- 
+
   async function handleCancelar() {
     if (!confirm('Tem certeza que deseja cancelar sua assinatura?')) return;
     setCancelando(true);
@@ -372,7 +370,7 @@ export function SubscriptionPage() {
       setCancelando(false);
     }
   }
- 
+
   if (loading) {
     return (
       <div className="flex justify-center py-24">
@@ -380,18 +378,18 @@ export function SubscriptionPage() {
       </div>
     );
   }
- 
+
   const mostrarPlanos =
     !status ||
     status.estado === 'TRIAL' ||
     status.estado === 'TRIAL_EXPIRED' ||
     status.estado === 'CANCELLED' ||
     status.estado === 'INCOMPLETE';
- 
+
   return (
     <div className="space-y-8 w-full">
       {status && <StatusBanner status={status} />}
- 
+
       {status?.estado === 'ACTIVE' && (
         <AssinaturaAtiva
           status={status}
@@ -399,7 +397,7 @@ export function SubscriptionPage() {
           cancelando={cancelando}
         />
       )}
- 
+
       {mostrarPlanos && (
         <GradePlanos
           plans={plans}
@@ -407,7 +405,7 @@ export function SubscriptionPage() {
           onSubscribe={handleSubscribe}
         />
       )}
- 
+
       <div className="flex flex-wrap justify-center gap-10 pt-4 opacity-40">
         {[
           { icon: ShieldCheck, label: 'LGPD Compliant' },
