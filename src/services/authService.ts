@@ -11,9 +11,4 @@ export const authService = {
     const response = await api.post<TokenResponse>('/auth/registrar', data);
     return response.data;
   },
-
-  logout(): void {
-    sessionStorage.removeItem('vf_token');
-    sessionStorage.removeItem('vf_user');
-  },
 };
