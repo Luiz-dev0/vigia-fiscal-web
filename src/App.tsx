@@ -4,6 +4,7 @@ import { PrivateRoute } from '@/components/PrivateRoute';
 import { PublicRoute } from '@/components/PublicRoute';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { CrispChat } from '@/components/CrispChat';
+import { SettingsPage } from '@/pages/SettingsPage';
 
 const LandingPage      = lazy(() => import('@/pages/LandingPage').then(m => ({ default: m.LandingPage })));
 const LoginPage        = lazy(() => import('@/pages/LoginPage').then(m => ({ default: m.LoginPage })));
@@ -56,6 +57,7 @@ export default function App() {
               <Route path="/nfes/:id"     element={<NfeDetailPage />} />
               <Route path="/alerts"       element={<AlertsPage />} />
               <Route path="/subscription" element={<SubscriptionPage />} />
+              <Route path="/configuracoes" element={<SettingsPage />} />
             </Route>
           </Route>
 
