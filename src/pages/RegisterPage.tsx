@@ -1,6 +1,7 @@
+// src/pages/RegisterPage.tsx
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, Lock, Mail, Phone, ShieldCheck, User } from 'lucide-react';
+import { ArrowRight, Eye, EyeOff, Lock, Mail, Phone, ShieldCheck, User } from 'lucide-react';
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
 import { useAuth } from '@/contexts/AuthContext';
@@ -11,15 +12,27 @@ export function RegisterPage() {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [confirmarSenha, setConfirmarSenha] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
+  const [showSenha, setShowSenha] = useState(false);
+  const [showConfirmarSenha, setShowConfirmarSenha] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [senhaError, setSenhaError] = useState('');
   const [aceitouTermos, setAceitouTermos] = useState(false);
   const { signIn } = useAuth();
   const navigate = useNavigate();
 
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
+
+    // valida senhas antes de qualquer chamada
+    if (senha !== confirmarSenha) {
+      setSenhaError('As senhas não coincidem.');
+      return;
+    }
+    setSenhaError('');
+
     setLoading(true);
     setError('');
     try {
@@ -38,7 +51,7 @@ export function RegisterPage() {
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
       <div className="max-w-5xl w-full bg-white rounded-[40px] shadow-2xl shadow-blue-900/10 overflow-hidden flex flex-col md:flex-row min-h-[700px] border border-slate-100">
 
-        {/* Lado esquerdo */}
+        {/* Lado esquerdo — idêntico ao original */}
         <div className="md:w-[45%] bg-vigia-navy p-14 text-white flex flex-col justify-between relative overflow-hidden">
           <div className="absolute inset-0 opacity-10 pointer-events-none">
             <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-vigia-blue rounded-full blur-[120px]" />
@@ -106,6 +119,7 @@ export function RegisterPage() {
                 </div>
               )}
 
+              {/* Nome */}
               <Input
                 label="Nome completo"
                 placeholder="Como devemos te chamar?"
@@ -115,6 +129,7 @@ export function RegisterPage() {
                 required
               />
 
+              {/* E-mail */}
               <Input
                 label="E-mail"
                 type="email"
@@ -125,26 +140,76 @@ export function RegisterPage() {
                 required
               />
 
-              <div className="grid grid-cols-2 gap-4">
-                <Input
-                  label="WhatsApp"
-                  placeholder="5511999999999"
-                  icon={<Phone className="w-4 h-4" />}
-                  value={whatsapp}
-                  onChange={(e) => setWhatsapp(e.target.value)}
-                />
-                <Input
-                  label="Senha"
-                  type="password"
-                  placeholder="Mín. 8 caracteres"
-                  icon={<Lock className="w-4 h-4" />}
-                  value={senha}
-                  onChange={(e) => setSenha(e.target.value)}
-                  required
-                  minLength={8}
-                />
+              {/* Senha — linha própria com olhinho */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-black uppercase tracking-widest text-slate-400">
+                  Senha
+                </label>
+                <div className="relative">
+                  <Input
+                    type={showSenha ? 'text' : 'password'}
+                    placeholder="Mín. 8 caracteres"
+                    icon={<Lock className="w-4 h-4" />}
+                    value={senha}
+                    onChange={(e) => {
+                      setSenha(e.target.value);
+                      if (senhaError) setSenhaError('');
+                    }}
+                    required
+                    minLength={8}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowSenha((s) => !s)}
+                    tabIndex={-1}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 transition-colors"
+                  >
+                    {showSenha ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
               </div>
 
+              {/* Confirmar senha — linha própria com olhinho */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-black uppercase tracking-widest text-slate-400">
+                  Confirmar senha
+                </label>
+                <div className="relative">
+                  <Input
+                    type={showConfirmarSenha ? 'text' : 'password'}
+                    placeholder="Repita a senha"
+                    icon={<Lock className="w-4 h-4" />}
+                    value={confirmarSenha}
+                    onChange={(e) => {
+                      setConfirmarSenha(e.target.value);
+                      if (senhaError) setSenhaError('');
+                    }}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmarSenha((s) => !s)}
+                    tabIndex={-1}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 transition-colors"
+                  >
+                    {showConfirmarSenha ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+                {senhaError && (
+                  <p className="text-[11px] font-bold text-red-500 mt-0.5 pl-1">{senhaError}</p>
+                )}
+              </div>
+
+              {/* WhatsApp — linha própria */}
+              <Input
+                label="WhatsApp"
+                placeholder="5511999999999"
+                icon={<Phone className="w-4 h-4" />}
+                value={whatsapp}
+                onChange={(e) => setWhatsapp(e.target.value)}
+              />
+
+              {/* Termos */}
               <div className="flex items-start gap-3">
                 <input
                   id="termos"
@@ -166,11 +231,7 @@ export function RegisterPage() {
                 </label>
               </div>
 
-              <Button
-                type="submit"
-                className="w-full h-12 group"
-                loading={loading}
-              >
+              <Button type="submit" className="w-full h-12 group" loading={loading}>
                 Criar conta e começar trial
                 {!loading && (
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
