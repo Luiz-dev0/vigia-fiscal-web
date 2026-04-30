@@ -1,9 +1,12 @@
-import { useState } from 'react';
-import { Eye, EyeOff, Lock, LogOut, Shield, Trash2, User } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Eye, EyeOff, Lock, LogOut, Shield, Trash2, User, KeyRound } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { certificadoService } from '@/services/certificadoService';
+import { cnpjService } from '@/services/cnpjService';
+import type { CertificadoResponse } from '@/types';
 
-// ── helper: iniciais (mesmo padrão do DashboardLayout) ────────────────────
+// ── helper: iniciais ──────────────────────────────────────────────────────
 function getInitials(nome?: string | null) {
   if (!nome) return 'VF';
   return nome
@@ -144,7 +147,7 @@ export function SettingsPage() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 
-  // segurança
+  // ── segurança ─────────────────────────────────────────────────────────
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -152,11 +155,75 @@ export function SettingsPage() {
   const [passwordSuccess, setPasswordSuccess] = useState(false);
   const [savingPassword, setSavingPassword] = useState(false);
 
-  // exclusão
+  // ── exclusão ──────────────────────────────────────────────────────────
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deletingAccount, setDeletingAccount] = useState(false);
 
-  // ── handlers ─────────────────────────────────────────────────────────
+  // ── certificado A1 ────────────────────────────────────────────────────
+  const [cnpjs, setCnpjs] = useState<{ id: string; cnpj: string; razaoSocial: string }[]>([]);
+  const [cnpjSelecionado, setCnpjSelecionado] = useState('');
+  const [certificado, setCertificado] = useState<CertificadoResponse | null>(null);
+  const [loadingCert, setLoadingCert] = useState(false);
+  const [pfxFile, setPfxFile] = useState<File | null>(null);
+  const [senhaCert, setSenhaCert] = useState('');
+  const [mostrarSenhaCert, setMostrarSenhaCert] = useState(false);
+  const [certFeedback, setCertFeedback] = useState<{ tipo: 'sucesso' | 'erro'; msg: string } | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    cnpjService.listar().then(setCnpjs).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    setCertificado(null);
+    setCertFeedback(null);
+    setPfxFile(null);
+    setSenhaCert('');
+    if (!cnpjSelecionado) return;
+
+    setLoadingCert(true);
+    certificadoService
+      .buscar(cnpjSelecionado)
+      .then(setCertificado)
+      .catch(() => setCertificado(null))
+      .finally(() => setLoadingCert(false));
+  }, [cnpjSelecionado]);
+
+  async function handleUploadCertificado() {
+    if (!cnpjSelecionado || !pfxFile || !senhaCert) return;
+    setLoadingCert(true);
+    setCertFeedback(null);
+    try {
+      const result = await certificadoService.upload(cnpjSelecionado, pfxFile, senhaCert);
+      setCertificado(result);
+      setPfxFile(null);
+      setSenhaCert('');
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      setCertFeedback({ tipo: 'sucesso', msg: 'Certificado enviado com sucesso.' });
+    } catch (err: any) {
+      const msg = err?.response?.data?.erro ?? 'Erro ao enviar o certificado.';
+      setCertFeedback({ tipo: 'erro', msg });
+    } finally {
+      setLoadingCert(false);
+    }
+  }
+
+  async function handleRemoverCertificado() {
+    if (!cnpjSelecionado) return;
+    setLoadingCert(true);
+    setCertFeedback(null);
+    try {
+      await certificadoService.remover(cnpjSelecionado);
+      setCertificado(null);
+      setCertFeedback({ tipo: 'sucesso', msg: 'Certificado removido.' });
+    } catch {
+      setCertFeedback({ tipo: 'erro', msg: 'Erro ao remover o certificado.' });
+    } finally {
+      setLoadingCert(false);
+    }
+  }
+
+  // ── handlers segurança ────────────────────────────────────────────────
   function handleSavePassword() {
     const errs: Record<string, string> = {};
     if (!currentPassword) errs.current = 'Informe a senha atual.';
@@ -168,7 +235,6 @@ export function SettingsPage() {
     if (Object.keys(errs).length > 0) return;
 
     setSavingPassword(true);
-    // TODO: chamar endpoint de troca de senha
     setTimeout(() => {
       setSavingPassword(false);
       setPasswordSuccess(true);
@@ -181,7 +247,6 @@ export function SettingsPage() {
 
   async function handleDeleteAccount() {
     setDeletingAccount(true);
-    // TODO: chamar endpoint de exclusão de conta
     await new Promise((r) => setTimeout(r, 1500));
     signOut();
     navigate('/login');
@@ -197,7 +262,7 @@ export function SettingsPage() {
   // ── render ────────────────────────────────────────────────────────────
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      {/* cabeçalho da página */}
+      {/* cabeçalho */}
       <div className="mb-2">
         <h1 className="text-2xl font-black uppercase tracking-widest text-slate-900 leading-none">
           Configurações
@@ -254,13 +319,11 @@ export function SettingsPage() {
             onChange={setConfirmPassword}
             error={passwordErrors.confirm}
           />
-
           {passwordSuccess && (
             <div className="p-4 bg-emerald-50 text-emerald-700 text-xs font-black uppercase tracking-widest rounded-[16px] border border-emerald-100">
               ✓ Senha alterada com sucesso!
             </div>
           )}
-
           <button
             onClick={handleSavePassword}
             disabled={savingPassword}
@@ -268,6 +331,125 @@ export function SettingsPage() {
           >
             {savingPassword ? 'Salvando...' : 'Salvar nova senha'}
           </button>
+        </div>
+      </Section>
+
+      {/* ── CERTIFICADO A1 ──────────────────────────────────────────── */}
+      <Section icon={<KeyRound size={18} />} title="Certificado A1">
+        <div className="flex flex-col gap-4">
+
+          {/* Dropdown de CNPJ */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+              CNPJ
+            </label>
+            <select
+              value={cnpjSelecionado}
+              onChange={(e) => setCnpjSelecionado(e.target.value)}
+              className="w-full rounded-[16px] border-2 border-slate-50 bg-slate-50 px-5 py-3.5 text-sm font-medium text-slate-700 outline-none transition-all focus:border-vigia-blue focus:bg-white focus:ring-4 focus:ring-blue-900/5"
+            >
+              <option value="">Selecione um CNPJ...</option>
+              {cnpjs.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.cnpj} — {c.razaoSocial}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {cnpjSelecionado && (
+            <div className="flex flex-col gap-4">
+
+              {loadingCert && (
+                <p className="text-sm font-medium text-slate-400">Carregando...</p>
+              )}
+
+              {/* Certificado já cadastrado */}
+              {!loadingCert && certificado && (
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center justify-between rounded-[16px] border-2 border-slate-50 bg-slate-50 px-5 py-4">
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                        Validade
+                      </span>
+                      <span className="text-sm font-semibold text-slate-700">
+                        {new Date(certificado.validade).toLocaleDateString('pt-BR', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </span>
+                    </div>
+                    <span
+                      className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest ${
+                        certificado.vencido
+                          ? 'bg-red-50 text-red-500 border border-red-100'
+                          : 'bg-emerald-50 text-emerald-600 border border-emerald-100'
+                      }`}
+                    >
+                      {certificado.vencido ? 'Vencido' : 'Válido'}
+                    </span>
+                  </div>
+                  <button
+                    onClick={handleRemoverCertificado}
+                    disabled={loadingCert}
+                    className="self-start flex items-center gap-2 px-6 py-3 rounded-[16px] bg-red-50 border-2 border-red-100 text-red-500 text-[11px] font-black uppercase tracking-widest hover:bg-red-100 transition-all disabled:opacity-50"
+                  >
+                    <Trash2 size={14} />
+                    Remover certificado
+                  </button>
+                </div>
+              )}
+
+              {/* Upload de novo certificado */}
+              {!loadingCert && !certificado && (
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                      Arquivo .pfx
+                    </label>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept=".pfx,.p12"
+                      onChange={(e) => setPfxFile(e.target.files?.[0] ?? null)}
+                      className="w-full rounded-[16px] border-2 border-slate-50 bg-slate-50 px-5 py-3.5 text-sm font-medium text-slate-700 outline-none file:mr-3 file:rounded-[10px] file:border-0 file:bg-vigia-blue file:px-3 file:py-1.5 file:text-[10px] file:font-black file:uppercase file:tracking-widest file:text-white"
+                    />
+                  </div>
+
+                  <PasswordField
+                    label="Senha do certificado"
+                    value={senhaCert}
+                    onChange={setSenhaCert}
+                    placeholder="Senha do .pfx"
+                  />
+
+                  <button
+                    onClick={handleUploadCertificado}
+                    disabled={!pfxFile || !senhaCert || loadingCert}
+                    className="self-start px-8 py-4 rounded-[20px] bg-gradient-to-r from-vigia-navy to-vigia-blue text-white text-[11px] font-black uppercase tracking-widest hover:shadow-xl hover:shadow-blue-900/20 transition-all disabled:opacity-40"
+                  >
+                    Enviar certificado
+                  </button>
+                </div>
+              )}
+
+              {/* Feedback inline */}
+              {certFeedback && (
+                <div
+                  className={`p-4 text-xs font-black uppercase tracking-widest rounded-[16px] border ${
+                    certFeedback.tipo === 'sucesso'
+                      ? 'bg-emerald-50 text-emerald-700 border-emerald-100'
+                      : 'bg-red-50 text-red-600 border-red-100'
+                  }`}
+                >
+                  {certFeedback.tipo === 'sucesso' ? '✓' : '✕'} {certFeedback.msg}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </Section>
 
@@ -285,7 +467,7 @@ export function SettingsPage() {
         </button>
       </Section>
 
-      {/* ── CONTA / ZONA DE PERIGO ───────────────────────────────────── */}
+      {/* ── ZONA DE PERIGO ──────────────────────────────────────────── */}
       <Section icon={<Shield size={18} />} title="Zona de perigo">
         <p className="text-sm font-medium text-slate-400 mb-5">
           A exclusão é permanente e não pode ser desfeita. Todos os dados serão removidos.
