@@ -24,7 +24,7 @@ function ReadonlyField({ label, value }: { label: string; value?: string | null 
       <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
         {label}
       </label>
-      <div className="rounded-[16px] border-2 border-slate-50 bg-slate-50 px-5 py-3.5 text-sm font-medium text-slate-500 select-none">
+      <div className="rounded-[16px] border-2 border-slate-50 bg-slate-50 px-5 py-3.5 text-sm font-medium text-slate-700 select-none">
         {value ?? '—'}
       </div>
     </div>
@@ -53,7 +53,7 @@ function PasswordField({ label, value, onChange, placeholder, error }: PasswordF
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder ?? '••••••••'}
-          className={`w-full rounded-[16px] border-2 px-5 py-3.5 pr-12 text-sm font-medium text-slate-700 placeholder-slate-300 outline-none transition-all focus:ring-4 focus:ring-blue-900/5 ${
+          className={`w-full rounded-[16px] border-2 px-5 py-3.5 pr-12 text-sm font-medium text-slate-700 placeholder-slate-400 outline-none transition-all focus:ring-4 focus:ring-blue-900/5 ${
             error
               ? 'border-red-300 focus:border-red-400'
               : 'border-slate-50 bg-slate-50 focus:border-vigia-blue focus:bg-white'

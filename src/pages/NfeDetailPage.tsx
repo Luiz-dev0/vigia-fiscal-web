@@ -73,7 +73,7 @@ export function NfeDetailPage() {
       setSucessoManifestacao(`Manifestação enviada! Protocolo: ${resultado.protocolo}`);
       setModalAberto(false);
     } catch {
-      setErroManifestacao('Erro ao enviar manifestação. Verifique a senha e tente novamente.');
+      setErroManifestacao('Erro ao enviar manifestação. Verifique a senha do certificado e tente novamente.');
     } finally {
       setLoadingManifestacao(false);
     }
@@ -120,7 +120,7 @@ export function NfeDetailPage() {
         <div className="bg-red-50 border-2 border-red-100 rounded-2xl p-6 flex items-center gap-4">
           <AlertTriangle className="w-6 h-6 text-red-600 shrink-0" />
           <p className="text-sm font-bold text-red-700">
-            Esta NF-e foi <strong>{nfe.status.toLowerCase()}</strong> e não possui validade jurídica.
+            Esta NF-e foi <strong>{nfe.status === 'CANCELADA' ? 'cancelada' : 'rejeitada'}</strong> e não possui validade jurídica. Verifique os impactos fiscais junto ao seu contador.
           </p>
         </div>
       )}
@@ -238,7 +238,7 @@ export function NfeDetailPage() {
             )}
 
             {manifestacaoFinal ? (
-              <div className="space-y-2">
+              <div className="space-y-2">>
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-800">
                   ✓ Concluída
                 </span>
@@ -256,13 +256,14 @@ export function NfeDetailPage() {
               </div>
             ) : (
               <div className="space-y-2">
+                <p className="text-xs text-slate-400 font-medium mb-3">Selecione o tipo de manifestação para esta nota. A ação será enviada diretamente à SEFAZ.</p>
                 <Button
                   variant="outline"
                   size="sm"
                   className="w-full border-green-500 text-green-700 hover:bg-green-50 font-bold"
                   onClick={() => abrirModal('CONFIRMACAO_OPERACAO')}
                 >
-                  Confirmar Operação
+                  ✓ Confirmar Operação
                 </Button>
                 <Button
                   variant="outline"
@@ -270,7 +271,7 @@ export function NfeDetailPage() {
                   className="w-full border-red-400 text-red-600 hover:bg-red-50 font-bold"
                   onClick={() => abrirModal('DESCONHECIMENTO_OPERACAO')}
                 >
-                  Desconhecer Operação
+                  ✗ Desconhecer Operação
                 </Button>
                 <Button
                   variant="outline"
@@ -278,7 +279,7 @@ export function NfeDetailPage() {
                   className="w-full border-yellow-500 text-yellow-700 hover:bg-yellow-50 font-bold"
                   onClick={() => abrirModal('OPERACAO_NAO_REALIZADA')}
                 >
-                  Operação não Realizada
+                  ⚠ Operação não Realizada
                 </Button>
               </div>
             )}
@@ -308,7 +309,7 @@ export function NfeDetailPage() {
                 value={senhaManifestacao}
                 onChange={(e) => setSenhaManifestacao(e.target.value)}
                 className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm pr-10 focus:outline-none focus:ring-2 focus:ring-vigia-blue"
-                placeholder="••••••••"
+                placeholder="Digite a senha do seu certificado"
                 autoComplete="current-password"
               />
               <button
@@ -353,7 +354,7 @@ export function NfeDetailPage() {
                 onClick={confirmarManifestacao}
                 disabled={loadingManifestacao}
               >
-                {loadingManifestacao ? 'Enviando...' : 'Confirmar'}
+                {loadingManifestacao ? 'Enviando...' : 'Enviar Manifestação'}
               </Button>
             </div>
           </div>

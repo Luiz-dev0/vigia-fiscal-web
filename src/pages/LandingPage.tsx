@@ -17,7 +17,9 @@ import {
   Smartphone,
   BarChart3,
   Mail,
-  Clock
+  Clock,
+  KeyRound,
+  ClipboardCheck
 } from 'lucide-react';
 import { Button } from '@/components/Button';
 import { Link } from 'react-router-dom';
@@ -81,13 +83,13 @@ export const LandingPage = () => {
           <div className="space-y-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-[#0056b3] text-[10px] font-bold uppercase tracking-widest border border-blue-100">
               <Zap className="w-3 h-3 fill-current" />
-              Monitoramento Fiscal Inteligente
+              Monitoramento · Certificado A1 · Manifestação
             </div>
             <h2 className="text-5xl md:text-7xl font-extrabold text-gray-900 leading-[1.05] tracking-tight">
-              O Cofre Digital da sua <span className="text-[#0056b3]">Gestão Fiscal</span>
+              NF-e detectada. <span className="text-[#0056b3]">Manifestação feita.</span> Tudo automático.
             </h2>
             <p className="text-xl text-gray-600 max-w-xl leading-relaxed">
-              Monitore todas as suas notas fiscais em tempo real, receba alertas via WhatsApp e garanta conformidade total com a SEFAZ em uma única plataforma robusta.
+              Cadastre seu certificado A1 uma vez. O Vigia Fiscal consulta a SEFAZ, te avisa no WhatsApp e permite confirmar, desconhecer ou registrar ciência de NF-e direto pelo painel sem abrir nenhum portal.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link to="/register">
@@ -120,8 +122,8 @@ export const LandingPage = () => {
                   <CheckCircle2 className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">NF-e Autorizada</p>
-                  <p className="text-sm font-bold text-gray-900">R$ 12.450,00</p>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Manifestação Confirmada</p>
+                  <p className="text-sm font-bold text-gray-900">Protocolo registrado na SEFAZ</p>
                 </div>
               </div>
             </div>
@@ -135,41 +137,41 @@ export const LandingPage = () => {
           <div className="max-w-2xl space-y-4">
             <h3 className="text-[10px] font-bold text-[#0056b3] uppercase tracking-[0.3em]">Funcionalidades</h3>
             <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
-              Tudo o que você precisa para um <span className="italic text-[#0056b3]">compliance</span> impecável.
+              Do monitoramento à manifestação — tudo em <span className="italic text-[#0056b3]">zero cliques</span> no portal SEFAZ.
             </h2>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
+                icon: KeyRound,
+                title: 'Certificado A1 Integrado',
+                desc: 'Faça upload do seu .pfx uma única vez. O Vigia Fiscal armazena com criptografia e o usa para autenticar cada consulta à SEFAZ — sem instalar nada, sem portal, sem complicação.'
+              },
+              {
+                icon: ClipboardCheck,
+                title: 'Manifestação do Destinatário',
+                desc: 'Confirme, desconheça ou registre "operação não realizada" direto pelo painel, com um clique. O sistema assina o XML com seu certificado A1 e envia à SEFAZ automaticamente. Ciência da operação é registrada sem ação nenhuma de sua parte.'
+              },
+              {
                 icon: Search,
                 title: 'Consulta Automática SEFAZ',
-                desc: 'Nossos robôs consultam a SEFAZ a cada 5 minutos, garantindo que nenhuma nota emitida contra seu CNPJ passe despercebida.'
+                desc: 'Nossos robôs consultam a SEFAZ a cada 5 minutos usando seu certificado A1, garantindo que nenhuma nota emitida contra seu CNPJ passe despercebida.'
               },
               {
                 icon: Bell,
                 title: 'Alertas via WhatsApp',
-                desc: 'Seja notificado instantaneamente sobre cancelamentos, rejeições ou notas denegadas diretamente no seu celular.'
-              },
-              {
-                icon: LayoutDashboard,
-                title: 'Gestão Multi-CNPJ',
-                desc: 'Ideal para contadores e holdings. Gerencie múltiplas empresas em uma única interface organizada e intuitiva.'
+                desc: 'Seja notificado instantaneamente sobre cancelamentos, rejeições ou notas denegadas diretamente no seu celular, via Meta WhatsApp API oficial.'
               },
               {
                 icon: Mail,
                 title: 'Alertas via E-mail',
-                desc: 'Receba notificações detalhadas por e-mail com todas as informações da nota fiscal detectada.'
+                desc: 'Receba notificações detalhadas por e-mail com todas as informações da nota fiscal detectada — configuráveis por tipo de evento.'
               },
               {
-                icon: Clock,
-                title: 'Histórico de NF-es',
-                desc: 'Acesse o histórico completo das notas fiscais monitoradas com filtros por período, status e CNPJ.'
-              },
-              {
-                icon: ShieldCheck,
-                title: 'Painel Multi-CNPJ',
-                desc: 'Visualize o status de todos os CNPJs monitorados em um único painel com indicadores em tempo real.'
+                icon: LayoutDashboard,
+                title: 'Gestão Multi-CNPJ',
+                desc: 'Ideal para contadores e holdings. Gerencie múltiplas empresas com certificados A1 individuais em uma única interface organizada e intuitiva.'
               }
             ].map((feature, i) => (
               <div key={i} className="group p-8 rounded-3xl border border-gray-100 hover:border-blue-100 hover:bg-blue-50/30 transition-all duration-300 space-y-6">
@@ -194,7 +196,7 @@ export const LandingPage = () => {
             <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
               Planos que crescem com o seu negócio.
             </h2>
-            <p className="text-gray-500 text-lg">Comece grátis e mude de plano quando precisar. Sem fidelidade.</p>
+            <p className="text-gray-500 text-lg">Todos os planos incluem Certificado A1 e Manifestação do Destinatário. Sem fidelidade.</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 text-left max-w-5xl mx-auto">
@@ -203,8 +205,15 @@ export const LandingPage = () => {
                 name: 'Básico',
                 price: '97',
                 badge: null,
-                desc: 'Para monitoramento individual simples.',
-                features: ['1 CNPJ monitorado', 'Alertas por E-mail', 'Suporte via Ticket', 'Histórico de 3 meses'],
+                desc: 'Para empresas que monitoram um único CNPJ.',
+                features: [
+                  '1 CNPJ monitorado',
+                  'Certificado A1 incluído',
+                  'Manifestação do Destinatário',
+                  'Alertas por E-mail',
+                  'Histórico de 3 meses',
+                  'Suporte via Ticket'
+                ],
                 trial: '7 dias grátis no plano Básico',
                 cta: 'Começar Grátis',
                 popular: false
@@ -213,8 +222,15 @@ export const LandingPage = () => {
                 name: 'Pro',
                 price: '197',
                 badge: 'Popular',
-                desc: 'Escalabilidade para pequenos escritórios.',
-                features: ['Até 5 CNPJs', 'Alertas WhatsApp + E-mail', 'Suporte Prioritário', 'Histórico de 12 meses'],
+                desc: 'Para escritórios contábeis e pequenas holdings.',
+                features: [
+                  'Até 5 CNPJs monitorados',
+                  'Certificado A1 por CNPJ',
+                  'Manifestação do Destinatário',
+                  'Alertas WhatsApp + E-mail',
+                  'Histórico de 12 meses',
+                  'Suporte Prioritário'
+                ],
                 trial: null,
                 cta: 'Assinar Pro',
                 popular: true
@@ -223,8 +239,15 @@ export const LandingPage = () => {
                 name: 'Enterprise',
                 price: '297',
                 badge: null,
-                desc: 'Potência total para grandes operações.',
-                features: ['CNPJs Ilimitados', 'Alertas WhatsApp + E-mail', 'Suporte Prioritário', 'Histórico Ilimitado'],
+                desc: 'Para grandes operações e grupos econômicos.',
+                features: [
+                  'CNPJs Ilimitados',
+                  'Certificado A1 por CNPJ',
+                  'Manifestação do Destinatário',
+                  'Alertas WhatsApp + E-mail',
+                  'Histórico Ilimitado',
+                  'Suporte Prioritário'
+                ],
                 trial: null,
                 cta: 'Assinar Enterprise',
                 popular: false
@@ -292,12 +315,20 @@ export const LandingPage = () => {
 
           <div className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-sm border border-gray-100">
             <FAQItem
+              question="Como funciona o Certificado A1 no Vigia Fiscal?"
+              answer="Você faz o upload do arquivo .pfx (certificado A1) pelo painel, uma única vez por CNPJ. O Vigia Fiscal armazena o certificado com criptografia e o utiliza automaticamente para autenticar cada consulta à SEFAZ. Nenhuma instalação, nenhum portal adicional."
+            />
+            <FAQItem
+              question="O que é a Manifestação do Destinatário e por que preciso fazer?"
+              answer="A Manifestação do Destinatário é uma obrigação fiscal: ao receber uma NF-e, sua empresa deve se manifestar junto à SEFAZ confirmando, desconhecendo ou sinalizando que a operação não foi realizada. O prazo é de até 180 dias. Com o Vigia Fiscal, isso é feito em um clique direto pelo painel — sem acessar o portal da SEFAZ. A Ciência da Operação é registrada automaticamente assim que a nota é detectada."
+            />
+            <FAQItem
               question="Preciso de certificado digital para usar?"
-              answer="Sim, para que nossos robôs possam consultar as notas fiscais diretamente na SEFAZ em seu nome, é necessário o uso de um certificado digital (A1 ou A3). O processo é 100% seguro e criptografado."
+              answer="Sim. O certificado A1 é necessário para que o sistema consulte a SEFAZ em seu nome e para assinar os eventos de manifestação. Você faz o upload do .pfx diretamente no painel. O processo é 100% seguro e criptografado."
             />
             <FAQItem
               question="Como funciona o período de teste grátis?"
-              answer="Você tem 7 dias para testar o plano Básico (1 CNPJ) sem custo algum. Não pedimos cartão de crédito para começar. Se gostar, basta escolher um plano ao final do período para continuar monitorando."
+              answer="Você tem 7 dias para testar o plano Básico (1 CNPJ) sem custo algum, incluindo Certificado A1 e Manifestação do Destinatário. Não pedimos cartão de crédito para começar. Se gostar, basta escolher um plano ao final do período."
             />
             <FAQItem
               question="Posso cancelar minha assinatura a qualquer momento?"
@@ -305,11 +336,11 @@ export const LandingPage = () => {
             />
             <FAQItem
               question="O Vigia Fiscal é seguro?"
-              answer="Segurança é nossa prioridade número um. Utilizamos criptografia de nível bancário (SSL/TLS), seguimos rigorosamente a LGPD e nossos servidores estão hospedados em infraestrutura de alta confiabilidade."
+              answer="Segurança é nossa prioridade número um. Os certificados A1 são armazenados com criptografia no banco de dados. Utilizamos SSL/TLS para todas as comunicações, seguimos rigorosamente a LGPD e nossos servidores estão em infraestrutura de alta confiabilidade."
             />
             <FAQItem
               question="Quantos CNPJs posso monitorar?"
-              answer="Depende do seu plano. O plano Básico permite 1 CNPJ, o Pro até 5, e o Enterprise é ilimitado. Você pode fazer o upgrade ou downgrade a qualquer momento."
+              answer="Depende do seu plano. O plano Básico permite 1 CNPJ, o Pro até 5, e o Enterprise é ilimitado. Cada CNPJ tem seu próprio certificado A1. Você pode fazer upgrade ou downgrade a qualquer momento."
             />
           </div>
         </div>
@@ -322,10 +353,10 @@ export const LandingPage = () => {
             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent)] pointer-events-none" />
             <div className="max-w-3xl mx-auto space-y-6 relative z-10">
               <h2 className="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight">
-                Pronto para blindar sua gestão fiscal?
+                Chega de entrar no portal da SEFAZ para cada nota.
               </h2>
               <p className="text-xl text-blue-100 font-medium opacity-90">
-                Automatize seu compliance fiscal e nunca mais perca uma nota. Comece seu trial de 7 dias agora.
+                Monitore, receba alertas e manifeste NF-es direto pelo painel. Comece seu trial de 7 dias — sem cartão de crédito.
               </p>
             </div>
             <div className="flex flex-wrap justify-center gap-6 relative z-10">
@@ -357,7 +388,7 @@ export const LandingPage = () => {
                 <h1 className="font-bold text-2xl text-gray-900 tracking-tight">Vigia Fiscal</h1>
               </div>
               <p className="text-gray-500 text-sm leading-relaxed max-w-xs">
-                Monitoramento fiscal inteligente para empresas brasileiras.
+                Monitoramento, alertas e manifestação fiscal automatizados para empresas brasileiras.
               </p>
             </div>
             <div className="space-y-6">
@@ -383,7 +414,7 @@ export const LandingPage = () => {
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                 <Lock className="w-3 h-3" />
-                Criptografia SSL 256-bit
+                Certificados A1 Criptografados
               </div>
               <div className="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                 <ShieldCheck className="w-3 h-3" />
