@@ -60,7 +60,7 @@ function StatusBanner({ status }: { status: StatusAssinaturaResponse }) {
           </div>
           <div>
             <p className="font-black text-amber-900 text-sm uppercase tracking-tight">
-              Trial gratuito ativo
+              Período de teste gratuito ativo
             </p>
             <p className="text-sm text-amber-700 font-medium mt-0.5">
               {dias <= 1
@@ -84,10 +84,10 @@ function StatusBanner({ status }: { status: StatusAssinaturaResponse }) {
         </div>
         <div>
           <p className="font-black text-red-900 text-sm uppercase tracking-tight">
-            Trial expirado
+            Período de teste encerrado
           </p>
           <p className="text-sm text-red-700 font-medium mt-0.5">
-            Seu período de teste encerrou. Escolha um plano abaixo para reativar o monitoramento.
+            Seu período de teste encerrou. Escolha um plano abaixo para continuar monitorando suas NF-es.
           </p>
         </div>
       </div>
@@ -105,7 +105,7 @@ function StatusBanner({ status }: { status: StatusAssinaturaResponse }) {
             Pagamento pendente
           </p>
           <p className="text-sm text-orange-700 font-medium mt-0.5">
-            Houve um problema com o seu pagamento. Atualize seu método de pagamento para continuar.
+            Houve um problema com o seu pagamento. Atualize seu método de pagamento para não perder o acesso ao monitoramento.
           </p>
         </div>
       </div>
@@ -209,18 +209,21 @@ function GradePlanos({
   const featuresMap: Record<string, string[]> = {
     básico: [
       '1 CNPJ monitorado',
+      'Manifestação do Destinatário',
       'Alertas por E-mail',
       'Suporte via Ticket',
       'Histórico de 3 meses',
     ],
     pro: [
       'Até 5 CNPJs',
+      'Manifestação do Destinatário',
       'Alertas WhatsApp + E-mail',
       'Suporte Prioritário',
       'Histórico de 12 meses',
     ],
     enterprise: [
       'CNPJs Ilimitados',
+      'Manifestação do Destinatário',
       'Alertas WhatsApp + E-mail',
       'Suporte Prioritário',
       'Histórico Ilimitado',
@@ -312,6 +315,8 @@ export function SubscriptionPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState<string | null>(null);
   const [cancelando, setCancelando] = useState(false);
+  const [modalCancelar, setModalCancelar] = useState(false);
+  const [erro, setErro] = useState('');
 
   useEffect(() => {
     Promise.all([billingService.getStatus(), billingService.listarPlanos()])
@@ -357,15 +362,16 @@ export function SubscriptionPage() {
   }
 
   async function handleCancelar() {
-    if (!confirm('Tem certeza que deseja cancelar sua assinatura?')) return;
     setCancelando(true);
+    setErro('');
     try {
       await billingService.cancelar();
       const novoStatus = await billingService.getStatus();
       setStatus(novoStatus);
+      setModalCancelar(false);
     } catch (err) {
       console.error('[handleCancelar] erro capturado:', err);
-      alert('Erro ao cancelar assinatura. Tente novamente.');
+      setErro('Erro ao cancelar assinatura. Tente novamente.');
     } finally {
       setCancelando(false);
     }
@@ -390,10 +396,16 @@ export function SubscriptionPage() {
     <div className="space-y-8 w-full">
       {status && <StatusBanner status={status} />}
 
+      {erro && (
+        <div className="bg-red-50 border-2 border-red-100 rounded-2xl p-6 text-red-700 font-bold">
+          {erro}
+        </div>
+      )}
+
       {status?.estado === 'ACTIVE' && (
         <AssinaturaAtiva
           status={status}
-          onCancelar={handleCancelar}
+          onCancelar={() => setModalCancelar(true)}
           cancelando={cancelando}
         />
       )}
@@ -420,6 +432,38 @@ export function SubscriptionPage() {
           </div>
         ))}
       </div>
+
+      {/* Modal de confirmação de cancelamento */}
+      {modalCancelar && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm">
+          <div className="bg-white rounded-[32px] shadow-2xl shadow-slate-900/20 p-10 max-w-sm w-full mx-4 border border-slate-100">
+            <div className="flex items-center justify-center w-16 h-16 rounded-[20px] bg-amber-50 mx-auto mb-5">
+              <AlertTriangle size={26} className="text-amber-500" />
+            </div>
+            <h3 className="text-[13px] font-black uppercase tracking-[0.2em] text-slate-900 text-center mb-3">
+              Cancelar Assinatura
+            </h3>
+            <p className="text-sm font-medium text-slate-500 text-center mb-8 leading-relaxed">
+              Tem certeza que deseja cancelar sua assinatura? Você continuará com acesso até o fim do período pago.
+            </p>
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={handleCancelar}
+                disabled={cancelando}
+                className="w-full py-4 rounded-[20px] bg-amber-500 text-white text-[11px] font-black uppercase tracking-widest hover:bg-amber-600 transition-all disabled:opacity-60"
+              >
+                {cancelando ? 'Cancelando...' : 'Sim, cancelar'}
+              </button>
+              <button
+                onClick={() => setModalCancelar(false)}
+                className="w-full py-4 rounded-[20px] border-2 border-slate-100 text-slate-500 text-[11px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all"
+              >
+                Manter Assinatura
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
