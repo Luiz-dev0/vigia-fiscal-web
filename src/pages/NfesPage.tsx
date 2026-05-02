@@ -82,7 +82,6 @@ export function NfesPage() {
         </div>
       </div>
 
-      {/* Table Section */}
       <Card padding="none">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
@@ -140,7 +139,19 @@ export function NfesPage() {
                     {formatDate(nfe.dataEmissao)}
                   </td>
                   <td className="px-6 py-4">
-                    <NfeStatusBadge status={nfe.status} />
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <NfeStatusBadge status={nfe.status} />
+                      {nfe.statusManifestacao === 'FINAL' && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-700">
+                          Manifestada
+                        </span>
+                      )}
+                      {nfe.statusManifestacao === 'CIENCIA' && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-700">
+                          Ciência
+                        </span>
+                      )}
+                    </div>
                   </td>
                   <td className="px-6 py-4 text-right">
                     <Link to={`/nfes/${nfe.id}`}>
@@ -157,4 +168,4 @@ export function NfesPage() {
       </Card>
     </div>
   );
-};
+}
