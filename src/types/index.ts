@@ -4,3 +4,4 @@ export * from './nfe';
 export * from './alert';
 export * from './billing';
 export * from './certificado';
+export * from './manifestacao';

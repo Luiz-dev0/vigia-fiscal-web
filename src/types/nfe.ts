@@ -24,4 +24,5 @@ export interface NfeResponse {
   cnpjId: string;
   criadoEm: string;
   atualizadoEm: string;
+  statusManifestacao: string | null;
 }
