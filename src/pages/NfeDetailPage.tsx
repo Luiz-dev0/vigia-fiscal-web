@@ -238,7 +238,7 @@ export function NfeDetailPage() {
             )}
 
             {manifestacaoFinal ? (
-              <div className="space-y-2">>
+              <div className="space-y-2">
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-800">
                   ✓ Concluída
                 </span>
