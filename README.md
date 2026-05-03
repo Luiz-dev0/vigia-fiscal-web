@@ -1,6 +1,16 @@
 # Vigia Fiscal — Web
 
-Frontend do SaaS de monitoramento de NF-es em tempo real.
+Frontend do [Vigia Fiscal](https://vigiafiscal.com.br), SaaS B2B brasileiro para monitoramento de NF-es (Notas Fiscais Eletrônicas) em tempo real.
+
+O sistema consulta a SEFAZ automaticamente por CNPJ, envia alertas via WhatsApp e e-mail, e permite realizar a Manifestação do Destinatário diretamente pela plataforma.
+
+## Repositórios do projeto
+
+| Repositório | Descrição |
+|---|---|
+| [`vigia-fiscal-web`](https://github.com/Luiz-dev0/vigia-fiscal-web) | Frontend (este repositório) |
+| [`nfe-monitor-api`](https://github.com/Luiz-dev0/nfe-monitor-api) | Backend — Spring Boot + Java 21 |
+| [`vigia-fiscal-infra`](https://github.com/Luiz-dev0/vigia-fiscal-infra) | Infraestrutura — Docker, Nginx, CI/CD |
 
 ## Stack
 
@@ -45,6 +55,17 @@ docker run -p 80:80 vigia-fiscal-web
 
 ## Variáveis de ambiente
 
-| Variável       | Descrição              | Padrão                  |
-|---------------|------------------------|-------------------------|
-| VITE_API_URL  | URL base da API        | http://localhost:8080   |
+| Variável | Descrição | Padrão |
+|---|---|---|
+| VITE_API_URL | URL base da API | http://localhost:8080 |
+
+## Arquitetura
+
+​```
+vigiafiscal.com.br        → Frontend (React + Vite)
+api.vigiafiscal.com.br    → Backend (Spring Boot)
+                          → PostgreSQL 16
+                          → Nginx (reverse proxy + SSL)
+​```
+
+Deploy automático via GitHub Actions em push para `main`.
