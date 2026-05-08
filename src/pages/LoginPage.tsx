@@ -43,12 +43,6 @@ export function LoginPage() {
           </div>
 
           <div className="space-y-10 relative z-10">
-            <Link to="/" className="flex items-center gap-3 group">
-              <div className="p-2 bg-vigia-blue rounded-xl">
-                <ShieldCheck className="w-7 h-7 text-white" />
-              </div>
-              <h1 className="text-xl font-black tracking-tighter">Vigia Fiscal</h1>
-            </Link>
 
             <div className="space-y-3">
               <h2 className="text-4xl font-black leading-tight tracking-tight">

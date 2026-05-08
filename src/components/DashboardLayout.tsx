@@ -28,10 +28,7 @@ export function DashboardLayout() {
     <div className="min-h-screen bg-vigia-bg flex font-sans">
       <aside className="w-72 bg-white border-r border-slate-100 flex flex-col fixed inset-y-0 z-20 shadow-2xl shadow-slate-900/5">
         {/* logo */}
-        <div className="p-10 flex items-center gap-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-vigia-navy to-vigia-blue rounded-2xl flex items-center justify-center shadow-xl shadow-blue-900/20">
-            <ShieldCheck className="text-white w-7 h-7" />
-          </div>
+        <div className="p-10 flex items-center">
           <div className="space-y-0.5">
             <h1 className="font-black text-slate-900 text-xl leading-none tracking-tight uppercase">
               Vigia Fiscal
