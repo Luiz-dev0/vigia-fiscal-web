@@ -53,7 +53,7 @@ export const LandingPage = () => {
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <ShieldCheck className="text-[#0056b3] w-8 h-8" />
+            <img src="/logo-512.png" alt="Vigia Fiscal" className="w-8 h-8 object-contain" />
             <h1 className="font-bold text-2xl text-gray-900 tracking-tight">Vigia Fiscal</h1>
           </div>
           <nav className="hidden md:flex items-center gap-8">
@@ -156,7 +156,7 @@ export const LandingPage = () => {
               {
                 icon: Search,
                 title: 'Consulta Automática SEFAZ',
-                desc: 'Nossos robôs consultam a SEFAZ a cada 5 minutos usando seu certificado A1, garantindo que nenhuma nota emitida contra seu CNPJ passe despercebida.'
+                desc: 'Nossos robôs consultam a SEFAZ usando seu certificado A1, garantindo que nenhuma nota emitida contra seu CNPJ passe despercebida.'
               },
               {
                 icon: Bell,
@@ -381,16 +381,7 @@ export const LandingPage = () => {
       {/* Footer */}
       <footer className="bg-white border-t border-gray-100 pt-24 pb-12">
         <div className="max-w-7xl mx-auto px-6 space-y-16">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-12">
-            <div className="col-span-2 md:col-span-1 space-y-6">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="text-[#0056b3] w-8 h-8" />
-                <h1 className="font-bold text-2xl text-gray-900 tracking-tight">Vigia Fiscal</h1>
-              </div>
-              <p className="text-gray-500 text-sm leading-relaxed max-w-xs">
-                Monitoramento, alertas e manifestação fiscal automatizados para empresas brasileiras.
-              </p>
-            </div>
+          <div className="grid grid-cols-2 gap-12">
             <div className="space-y-6">
               <h5 className="text-xs font-bold text-gray-900 uppercase tracking-widest">Produto</h5>
               <ul className="space-y-4 text-sm font-medium text-gray-500">
